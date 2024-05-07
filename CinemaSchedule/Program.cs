@@ -7,7 +7,7 @@ var connectionString = builder.Configuration.GetConnectionString("DBContextConne
 
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DBContext>();
+builder.Services.AddDefaultIdentity<User>(options => { options.SignIn.RequireConfirmedAccount = false; options.SignIn.RequireConfirmedEmail = false; }).AddEntityFrameworkStores<DBContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
