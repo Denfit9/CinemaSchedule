@@ -1,0 +1,43 @@
+﻿@page
+@using CinemaSchedule.Views.Profile;
+@using Microsoft.AspNetCore.Identity
+@using CinemaSchedule.Areas.Identity.Data
+
+@model ProfileModel
+@section Styles {
+    <link href="@Url.Content("ProfileStyles.css")" rel="stylesheet" type="text/css" />
+}
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
+@{
+}
+
+<main class="container">
+    <div class="card">
+        <!--<img src="https://res.cloudinary.com/alexandracaulea/image/upload/v1582179610/user_fckc9f.jpg" alt="User image" class="card__image" /> -->
+        <div class="card__text">
+            @userAuth.FirstName @userAuth.LastName
+        </div>
+        <ul class="card__info">
+            <li>
+                <span class="card__info__stats">172</span>
+                <span>posts</span>
+            </li>
+            <li>
+                <span class="card__info__stats">47</span>
+                <span>followers</span>
+            </li>
+            <li>
+                <span class="card__info__stats">20</span>
+                <span>following</span>
+            </li>
+        </ul>
+        <div class="card__action">
+            <button class="card__action__button card__action--follow">follow</button>
+            <button class="card__action__button card__action--message">message</button>
+        </div>
+    </div>
+</main>

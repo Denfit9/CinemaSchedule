@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CinemaSchedule.Areas.Identity.Pages.Account
 {
+    
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -111,8 +112,15 @@ namespace CinemaSchedule.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/");
+            }
+            else
+            {
+                ReturnUrl = returnUrl;
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

@@ -24,7 +24,21 @@ namespace CinemaSchedule.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnGet()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            return LocalRedirect("/");
+        }
+
+        public async Task<IActionResult> OnPost()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            return LocalRedirect("/");
+        }
+
+        /*public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
@@ -38,6 +52,6 @@ namespace CinemaSchedule.Areas.Identity.Pages.Account
                 // request and the identity for the user gets updated.
                 return RedirectToPage();
             }
-        }
+        }*/
     }
 }

@@ -1,11 +1,12 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CinemaSchedule</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
+    @RenderSection("Styles", required: false)
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CinemaSchedule.styles.css" asp-append-version="true" />
     <style>
@@ -19,15 +20,7 @@
         <nav class="py-2 bg-body-tertiary border-bottom">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
-                    <li class="nav-item">
-                        <a style="color:black "  class="nav-link link-body-emphasis px-2" asp-area="" asp-controller="Home" asp-action="Index">CinemaSchedule</a>
-                        </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link link-body-emphasis px-2">Pricing</a>
-                        </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link link-body-emphasis px-2">About</a>
-                        </li>
+                    <partial name = "_NavigationBarPartial" />
                 </ul>
                 <ul class="nav">
                     <partial name="_LoginPartial" />
