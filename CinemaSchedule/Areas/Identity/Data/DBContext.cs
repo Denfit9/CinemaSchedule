@@ -12,6 +12,8 @@ public class DBContext : IdentityDbContext<User>
     {
     }
 
+    public DbSet<User> users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -22,7 +22,7 @@ build_property.EnableComHosting =
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
-build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = C:\Users\d0306\source\repos\CinemaShedule\CinemaSchedule\CinemaSchedule
 build_property._RazorSourceGeneratorDebug = 
 
@@ -64,6 +64,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Profile/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Profile/ProfileEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Shared/Error.cshtml]

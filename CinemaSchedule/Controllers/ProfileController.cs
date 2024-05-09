@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaSchedule.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         [Route("Profile")]
@@ -9,5 +11,7 @@ namespace CinemaSchedule.Controllers
         {
             return View();
         }
+
+
     }
 }

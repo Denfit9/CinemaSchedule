@@ -16,7 +16,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllers(
+    options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

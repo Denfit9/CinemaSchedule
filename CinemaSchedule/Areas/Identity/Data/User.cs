@@ -9,6 +9,7 @@ namespace CinemaSchedule.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the User class
 public class User : IdentityUser
 {
+    public byte[] ProfilePicture { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

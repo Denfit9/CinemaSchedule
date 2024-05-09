@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "5c4oVIbhclVGac2tAI4qdtTYgF14paJRnilNgmD00M4=",
+  "Hash": "/vZK61cKudHr0miwsR3CQQcorlYVoOpU3FbNhGbkfY8=",
   "Source": "CinemaSchedule",
   "BasePath": "_content/CinemaSchedule",
   "Mode": "Default",
@@ -2067,6 +2067,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\userPFP.png",
+      "SourceId": "CinemaSchedule",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\",
+      "BasePath": "_content/CinemaSchedule",
+      "RelativePath": "images/userPFP.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\userPFP.png"
     },
     {
       "Identity": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\js\\site.js",
