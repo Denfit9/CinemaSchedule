@@ -12,8 +12,17 @@
 {
         <li class="nav-item">
             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                @Html.Raw("<img class='circular--landscape' style='display: inline-block; position: relative; width: 25px; height: 25px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
-                         + Convert.ToBase64String(userAuth.ProfilePicture) + "\" />") @userAuth.FirstName @userAuth.LastName
+                @{
+                    if (userAuth.ProfilePicture == null || userAuth.ProfilePicture.Length == 0)
+                    {
+                        <img src="/images/userPFP.png" alt="Альтернативное изображение" style="display: inline-block; position: relative; width: 25px; height: 25px; overflow: hidden; border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        @Html.Raw("<img class='circular--landscape' style='display: inline-block; position: relative; width: 25px; height: 25px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
+                             + Convert.ToBase64String(userAuth.ProfilePicture) + "\" />") 
+                    }
+                } @userAuth.FirstName @userAuth.LastName
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/Profile">Профиль</a></li>

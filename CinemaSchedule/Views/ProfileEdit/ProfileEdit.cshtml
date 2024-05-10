@@ -1,0 +1,62 @@
+﻿@using CinemaSchedule.Views.Profile;
+@using Microsoft.AspNetCore.Identity
+@using CinemaSchedule.Areas.Identity.Data
+
+@model CinemaSchedule.Models.ProfileEditViewModel
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
+@{
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main class="container">
+    <h1>Изменение профиля</h1>
+
+    <div class="container2">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label for="formFileMultiple" class="col-sm-3 col-form-labe">Изображение профиля</label>
+                <div class="col-sm-6">
+                    @Html.ValidationMessageFor(m => m.ProfilePicture, null, new { @class = "text-danger" })
+                    <input class="form-control" type="file" asp-for="ProfilePicture">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Имя</label>
+                <div class="col-sm-6">
+                    @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "text-danger" })
+                    <input type="text" class="form-control" value=@userAuth.FirstName asp-for="FirstName" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Фамилия</label>
+                <div class="col-sm-6">
+                    @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "text-danger" })
+                    <input type="text" class="form-control" value=@userAuth.LastName asp-for="LastName" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Пароль</label>
+                <div class="col-sm-6">
+                    @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
+                    <input type="password" class="form-control" value="" asp-for="Password" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="offset-sm-3 col-sm-3 d-grid">
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+                <div class="col-sm-3 d-grid">
+                    <a class="btn btn-outline-primary" href="../Profile" role="button">Отмена</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</main>

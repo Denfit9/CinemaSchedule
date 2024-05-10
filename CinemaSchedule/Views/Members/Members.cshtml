@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity.Data;
+
+@model List<CinemaSchedule.Areas.Identity.Data.User>;
+
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<main class="container">
+    <div class="row">
+    @if (Model.Any())
+    {
+        foreach(var user in Model)
+            {
+                <div class="col">
+             <div class="container py-2 h-100">
+                 <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-md-12 col-xl-4">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body text-center">
+                                <div class="mt-3 mb-4">
+                                     @{
+                                         if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
+                                        {
+                                            <img src="../images/userPFP.png" alt="Альтернативное изображение" style="display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;" />
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("<img class='circular--landscape' style='display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
+                                                + Convert.ToBase64String(user.ProfilePicture) + "\" />")
+                                        }
+                                    }
+
+                                </div>
+                                <h4 class="mb-2"> @user.FirstName @user.LastName  </h4>
+                                    <p class="text-muted mb-2"> @user.Id </p>
+                                    <p class ="text-muted mb-4"> <a href="#!">Кинотеатр</a></p>
+                                    <a class="btn btn-primary" asp-controller="Members" asp-action="UserProfile" asp-route-id="@user.Id">Профиль</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        }
+    }
+    </div>
+</main>

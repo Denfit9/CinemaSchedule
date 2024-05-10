@@ -21,7 +21,7 @@ namespace CinemaSchedule.Controllers
         [HttpGet]
         public IActionResult ProfileEdit()
         {
-            return View("Views/Profile/ProfileEdit.cshtml");
+            return View();
         }
 
 
@@ -51,7 +51,7 @@ namespace CinemaSchedule.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("File", "The file is too large.");
+                            ModelState.AddModelError("File", "Файл слишком большой");
                         }
                     }
                 }
@@ -61,19 +61,19 @@ namespace CinemaSchedule.Controllers
             if (profileEditViewModel.FirstName.Length < 2)
             {
                 ModelState.AddModelError(nameof(ProfileEditViewModel.FirstName), "Необходимо заполнить поле имени хоят бы двумя символами!");
-                return View("Views/Profile/ProfileEdit.cshtml");
+                return View(profileEditViewModel);
             }
             if (profileEditViewModel.LastName.Length < 2)
             {
                 ModelState.AddModelError(nameof(ProfileEditViewModel.LastName), "Необходимо заполнить поле фамилии хоят бы двумя символами!");
-                return View("Views/Profile/ProfileEdit.cshtml");
+                return View(profileEditViewModel);
             }
 
 
             if(profileEditViewModel.Password != user.Password || profileEditViewModel.Password.Length==0)
             {
                 ModelState.AddModelError(nameof(ProfileEditViewModel.Password), "Неправильный пароль!");
-                return View("Views/Profile/ProfileEdit.cshtml");
+                return View(profileEditViewModel);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace CinemaSchedule.Controllers
                 {
                     return RedirectToAction("Profile", "Profile");
                 }
-                return View("Views/Profile/ProfileEdit.cshtml");
+                return View(profileEditViewModel);
             }
             
         }
