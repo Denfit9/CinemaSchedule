@@ -67,14 +67,22 @@ namespace CinemaSchedule.Controllers
         [HttpGet]
         public async Task<IActionResult> EditNote(Guid id)
         {
+
             var note = await dbContext.Notes.FindAsync(id);
+            if(note.UserId != userManager.GetUserId(User))
+            {
+                return RedirectToAction("Notes", "Notes");
+            }
             return View(note);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditNote(Note viewModel)
         {
-
+            if (viewModel.UserId != userManager.GetUserId(User))
+            {
+                return RedirectToAction("Notes", "Notes");
+            }
             if (viewModel.NoteName.IsNullOrEmpty())
             {
                 ModelState.AddModelError(nameof(viewModel.NoteName), "Название заметки должно быть заполнено хотя бы одним символом");
@@ -103,6 +111,10 @@ namespace CinemaSchedule.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Note viewModel)
         {
+            if (viewModel.UserId != userManager.GetUserId(User))
+            {
+                return RedirectToAction("Notes", "Notes");
+            }
             var note = await dbContext.Notes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == viewModel.Id);
