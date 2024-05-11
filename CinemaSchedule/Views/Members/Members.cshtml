@@ -1,50 +1,76 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Identity.Data;
+@using CinemaSchedule.Views.Profile;
+@using Microsoft.AspNetCore.Identity
+@using CinemaSchedule.Areas.Identity.Data
 
 @model List<CinemaSchedule.Areas.Identity.Data.User>;
 
 @{
     ViewData["Title"] = "Пользователи";
 }
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
 
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
 <main class="container">
     <div class="row">
     @if (Model.Any())
     {
         foreach(var user in Model)
-            {
-                <div class="col">
-             <div class="container py-2 h-100">
-                 <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col-md-12 col-xl-4">
-                        <div class="card" style="border-radius: 15px;">
-                            <div class="card-body text-center">
-                                <div class="mt-3 mb-4">
-                                     @{
-                                         if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
-                                        {
-                                            <img src="../images/userPFP.png" alt="Альтернативное изображение" style="display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;" />
-                                        }
-                                        else
-                                        {
-                                            @Html.Raw("<img class='circular--landscape' style='display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
-                                                + Convert.ToBase64String(user.ProfilePicture) + "\" />")
-                                        }
-                                    }
+        {
 
-                                </div>
-                                <h4 class="mb-2"> @user.FirstName @user.LastName  </h4>
-                                    <p class="text-muted mb-2"> @user.Id </p>
-                                    <p class ="text-muted mb-4"> <a href="#!">Кинотеатр</a></p>
-                                    <a class="btn btn-primary" asp-controller="Members" asp-action="UserProfile" asp-route-id="@user.Id">Профиль</a>
-                            </div>
+            <div class="col-md-12 col-xl-4" style="margin-top:1%">
+                <div class="card" style="border-radius: 15px;">
+                    <div class="card-body text-center">
+                        <div class="mt-3 mb-4">
+                           @{
+                             if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
+                             {
+                             <img src="../images/userPFP.png" alt="Альтернативное изображение" style="display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;" />
+                             }
+                             else
+                             {
+                             @Html.Raw("<img class='circular--landscape' style='display: inline-block; position: relative; width: 100px; height: 100px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
+                                 + Convert.ToBase64String(user.ProfilePicture) + "\" />")
+                             }
+                            }
+
                         </div>
+                        <h4 class="mb-2"> @user.FirstName @user.LastName  </h4>
+                        <p class="text-muted mb-2"> @user.Id </p>
+                        <p class ="text-muted mb-4"> <a href="#!">Кинотеатр</a></p>
+                        <a type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary me-1 flex-grow-1" asp-controller="Members" asp-action="UserProfile" asp-route-id="@user.Id">Профиль</a>
                     </div>
-
                 </div>
             </div>
-            </div>
+
         }
     }
     </div>
+    <ul class="pagination">
+        @{
+            var users = UserManager.Users.Where(x => x.Id != UserManager.GetUserId(User)).ToList();
+            var totalCount = users.Count();
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / 6);
+            for (int i = 1; i <= totalPages; i++)
+            {
+                if (Convert.ToInt32(ViewData["CurrentPage"].ToString()) == i)
+                {
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="/Members?CurrentPage=@i">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="/Members?CurrentPage=@i">@i</a></li>
+                }
+            }
+          }
+    </ul>
 </main>

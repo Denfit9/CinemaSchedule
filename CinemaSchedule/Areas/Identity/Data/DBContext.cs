@@ -1,4 +1,5 @@
 ﻿using CinemaSchedule.Areas.Identity.Data;
+using CinemaSchedule.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ public class DBContext : IdentityDbContext<User>
     }
 
     public DbSet<User> users { get; set; }
+
+    public DbSet<Note> Notes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

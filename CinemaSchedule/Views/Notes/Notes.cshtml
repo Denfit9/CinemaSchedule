@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<CinemaSchedule.Models.Entities.Note>
+
+<h1>Заметки</h1>
+
+<a class="btn btn-light" asp-controller="Notes" asp-action="AddNote">Новая заметка</a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Последнее обновление</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var note in Model)
+        {
+            var exploreText = note.NoteDescription;
+            var exploreTextShort = "";
+            if (exploreText != null)
+            {
+                if (exploreText.ToString().Length > 22)
+                {
+                    exploreTextShort = exploreText.ToString().Substring(0, 22);
+                    exploreTextShort = exploreTextShort + "...";
+                }
+                else { exploreTextShort = exploreText; }
+            }
+            <tr>
+                <td>@note.NoteName</td>
+                <td>@exploreTextShort</td>
+                <td>@note.LastUpdated</td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Notes" asp-action="EditNote" asp-route-id="@note.Id">Изменить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

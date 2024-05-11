@@ -3,6 +3,7 @@ using CinemaSchedule.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace CinemaSchedule.Controllers
@@ -32,7 +33,8 @@ namespace CinemaSchedule.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             user.FirstName = profileEditViewModel.FirstName;
-            if(profileEditViewModel.ProfilePicture == null)
+            user.LastName = profileEditViewModel.LastName;
+            if (profileEditViewModel.ProfilePicture == null)
             {
 
             }
@@ -57,13 +59,22 @@ namespace CinemaSchedule.Controllers
                 }
             }
             
-
-            if (profileEditViewModel.FirstName.Length < 2)
+            if(profileEditViewModel.FirstName.IsNullOrEmpty())
             {
                 ModelState.AddModelError(nameof(ProfileEditViewModel.FirstName), "Необходимо заполнить поле имени хоят бы двумя символами!");
                 return View(profileEditViewModel);
             }
-            if (profileEditViewModel.LastName.Length < 2)
+            else if (profileEditViewModel.FirstName.Length < 2)
+            {
+                ModelState.AddModelError(nameof(ProfileEditViewModel.FirstName), "Необходимо заполнить поле имени хоят бы двумя символами!");
+                return View(profileEditViewModel);
+            }
+            if (profileEditViewModel.LastName.IsNullOrEmpty())
+            {
+                ModelState.AddModelError(nameof(ProfileEditViewModel.LastName), "Необходимо заполнить поле фамилии хоят бы двумя символами!");
+                return View(profileEditViewModel);
+            }
+            else if (profileEditViewModel.LastName.Length < 2)
             {
                 ModelState.AddModelError(nameof(ProfileEditViewModel.LastName), "Необходимо заполнить поле фамилии хоят бы двумя символами!");
                 return View(profileEditViewModel);

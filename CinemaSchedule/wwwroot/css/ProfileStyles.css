@@ -2,3 +2,16 @@
     text-align:center;
     padding:10px;
 }
+.row {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.pagination {
+    padding-top: 1%;
+    position: absolute;
+    bottom: 6%;
+    left: 78.3%;
+}
