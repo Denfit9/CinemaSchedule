@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity.Data;
+@using CinemaSchedule.Views.Profile;
+@using CinemaSchedule.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
+@model CinemaSchedule.Models.Entities.Cinema
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main class="container">
+    <h1>Изменение кинотеатра</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Картинка кинотеатра</label>
+            @Html.ValidationMessageFor(m => m.CinemaPicture, null, new { @class = "text-danger" })
+            <input id="CinemaPicture" class="form-control" type="file" asp-for="CinemaPicture">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Название кинотеатра</label>
+            <div class="col-sm-12">
+                @Html.ValidationMessageFor(m => m.CinemaName, null, new { @class = "text-danger" })
+                <input type="text" class="form-control" asp-for="CinemaName">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Адрес кинотеатра</label>
+            <div class="col-sm-12">
+                @Html.ValidationMessageFor(m => m.CinemaAddress, null, new { @class = "text-danger" })
+                <input type="text" class="form-control" asp-for="CinemaAddress">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+            <div class="col-sm-12">
+                @Html.ValidationMessageFor(m => m.CinemaDescription, null, new { @class = "text-danger" })
+                <textarea class="form-control" rows="4" asp-for="CinemaDescription"></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            
+        </div>
+    </form>
+</main>

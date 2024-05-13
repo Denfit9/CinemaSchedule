@@ -13,10 +13,13 @@ public class DBContext : IdentityDbContext<User>
     {
     }
 
-    public DbSet<User> users { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public DbSet<Note> Notes { get; set; }
 
+    public DbSet<Cinema> Cinemas { get; set; }
+
+    public DbSet<Hall> Halls { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

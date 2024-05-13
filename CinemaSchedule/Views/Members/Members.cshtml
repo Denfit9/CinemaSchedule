@@ -1,10 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Identity.Data;
 @using CinemaSchedule.Views.Profile;
-@using Microsoft.AspNetCore.Identity
 @using CinemaSchedule.Areas.Identity.Data
 
-@model List<CinemaSchedule.Areas.Identity.Data.User>;
+@model CinemaSchedule.Models.UsersListVM;
 
 @{
     ViewData["Title"] = "Пользователи";
@@ -21,10 +20,19 @@
     <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
 </head>
 <main class="container">
-    <div class="row">
-    @if (Model.Any())
+    <h1>Пользователи</h1>
+    <form asp-action="Members">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Поиск пользователей" name="term">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+            </div>
+        </div>
+    </form>
+    <div id="body" class="row">
+    @if (Model.Users.Any())
     {
-        foreach(var user in Model)
+        foreach(var user in Model.Users)
         {
 
             <div class="col-md-12 col-xl-4" style="margin-top:1%">
@@ -46,7 +54,14 @@
                         </div>
                         <h4 class="mb-2"> @user.FirstName @user.LastName  </h4>
                         <p class="text-muted mb-2"> @user.Id </p>
-                        <p class ="text-muted mb-4"> <a href="#!">Кинотеатр</a></p>
+                            @if (user.cinemaID == null)
+                            {
+                                <p class="text-muted mb-4">У пользователя нет кинотеатра</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-4"> <a asp-controller="Cinema" asp-action="CinemaProfileVisit" asp-route-id="@user.Id">Кинотеатр</a></p>
+                            }
                         <a type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary me-1 flex-grow-1" asp-controller="Members" asp-action="UserProfile" asp-route-id="@user.Id">Профиль</a>
                     </div>
                 </div>
@@ -55,22 +70,32 @@
         }
     }
     </div>
+    <div id="footer">
     <ul class="pagination">
-        @{
-            var users = UserManager.Users.Where(x => x.Id != UserManager.GetUserId(User)).ToList();
-            var totalCount = users.Count();
-            var totalPages = (int)Math.Ceiling((decimal)totalCount / 6);
-            for (int i = 1; i <= totalPages; i++)
+            @if (Model.CurrentPage > 1)
             {
-                if (Convert.ToInt32(ViewData["CurrentPage"].ToString()) == i)
-                {
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="/Members?CurrentPage=@i">@i</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="page-link" href="/Members?CurrentPage=@i">@i</a></li>
-                }
+                <li class="page-item">
+                    <a class="page-link" href="/Members?term=@Model.Term&CurrentPage=@(Model.CurrentPage-1)" aria-label="Previous">&laquo;</a>
+                </li>
             }
-          }
-    </ul>
+        @for(int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.CurrentPage)
+            {
+                <li class="page-item active" aria-current="page"><a class="page-link" href="/Members?term=@Model.Term&CurrentPage=@Model.CurrentPage">@i</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Members?term=@Model.Term&CurrentPage=@i">@i</a></li>
+            }
+        }
+        
+            @if(Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Members?term=@Model.Term&CurrentPage=@(Model.CurrentPage+1)" aria-label="Next">&raquo;</a>
+                </li>
+            }
+        </ul>
+    </div>
 </main>

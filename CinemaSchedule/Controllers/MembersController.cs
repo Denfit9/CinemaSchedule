@@ -14,52 +14,51 @@ namespace CinemaSchedule.Controllers
     public class MembersController : Controller
     {
         private readonly UserManager<User> _userManager;
-
-        public MembersController(UserManager<User> userManager)
+        private readonly DBContext _dbContext;
+        public MembersController(UserManager<User> userManager, DBContext dBContext)
         {
             _userManager = userManager;
+            _dbContext = dBContext;
         }
 
         [Route("Members")]
-        [HttpGet]
-        public IActionResult Members(int currentPage)
+        public IActionResult Members(string term="", int currentPage=1)
         {
-            if (currentPage == 0)
-            {
-                currentPage++;
-            }
-            var users = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(User)).ToList();
-            var totalCount = users.Count();
-            var totalPages = (int)Math.Ceiling((decimal)totalCount / 6);
-            if (currentPage > totalPages)
-            {
-                ViewData["CurrentPage"] = 1;
-                return View(GetMembers(1));
-            }
-            else
-            {
-                ViewData["CurrentPage"] = currentPage;
-                return View(GetMembers(currentPage));
-            }
-        }
+            term = string.IsNullOrEmpty(term)?"": term.ToLower();
+            var usersData = new UsersListVM();
+            var users = (from u in _dbContext.Users
+                         where term=="" || u.FirstName.ToLower().Contains(term) || u.LastName.ToLower().Contains(term) || u.Id.ToLower().Contains(term)
+                         select new User
+                         {
+                             Id = u.Id,
+                             FirstName = u.FirstName,
+                             LastName = u.LastName,
+                             Email = u.Email,
+                             ProfilePicture = u.ProfilePicture,
+                             cinemaID = u.cinemaID,
+                         }
+                        ).Where(x => x.Id != _userManager.GetUserId(User));
 
-        public IEnumerable<User> GetMembers(int page = 1, int pageSize=6)
-        {
-            var users = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(User)).ToList();
-            var totalCount = users.Count();
-            var totalPages = (int)Math.Ceiling((decimal)totalCount/pageSize);
-            var usersPerPage = users
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            return usersPerPage;
+            var totalRecords = users.Count();
+            int pageSize = 6;
+            var totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+            if (currentPage > totalPages || currentPage<totalPages)
+            {
+                currentPage = 1;
+            }
+            users = users.Skip((currentPage-1)*pageSize).Take(pageSize);
+            usersData.Users = users;
+            usersData.CurrentPage=currentPage;
+            usersData.TotalPages=totalPages;
+            usersData.PageSize = pageSize;
+            usersData.Term = term;
+            return View(usersData);
         }
-
         [HttpGet]
         public async Task<IActionResult> UserProfile(Guid id)
         {
             User user = await _userManager.FindByIdAsync(id.ToString());
-            if(id.ToString() == _userManager.GetUserId(User))
+            if (id.ToString() == _userManager.GetUserId(User))
             {
                 return RedirectToAction("Profile", "Profile");
             }

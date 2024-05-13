@@ -34,7 +34,14 @@
             </div>
             <h4 class="mb-2"> @userAuth.FirstName @userAuth.LastName  </h4>
                         <p class="text-muted mb-2"> @userAuth.Id </p>
-                        <p class ="text-muted mb-4"> <a href="#!">Кинотеатр</a></p>
+                        @if (userAuth.cinemaID == null)
+                        {
+                            <p class="text-muted mb-4">У вас нет кинотеатра</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-4"> <a asp-controller="Cinema" asp-action="CinemaProfileVisit" asp-route-id="@userAuth.Id">Кинотеатр</a></p>
+                        }
                         <a href="../Profile/Edit"><button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-rounded btn-lg">Изменить</button></a>
             </div>
           </div>

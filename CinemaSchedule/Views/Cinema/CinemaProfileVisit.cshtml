@@ -1,0 +1,205 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity.Data;
+@using CinemaSchedule.Views.Profile;
+@using CinemaSchedule.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+
+@{
+    ViewData["Title"] = "Кинотеатр";
+}
+
+@model CinemaSchedule.Models.Entities.Cinema;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main class="container">
+    <h1>Ваш кинотеатр</h1>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+    </svg>
+        <section style="background-color: #eee;">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                @{
+                                    if (Model.CinemaPicture == null || Model.CinemaPicture.Length == 0)
+                                    {
+                                        <img src="../images/cinemaPFP.png" alt="Альтернативное изображение" class="img-fluid" style="width: 180px; border-radius: 10px;" />
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("<img class='img - fluid' style='width: 180px; border - radius: 10px;' src=\"data:image/jpeg;base64,"
+                                             + Convert.ToBase64String(@Model.CinemaPicture) + "\" />")
+                                    }
+                                }
+                                <h5 class="my-3">@Model.CinemaName</h5>
+                                @if (Model.DirectorId.ToString() == userAuth.Id)
+                                {
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <a class="btn btn-outline-primary ms-1" asp-controller="Cinema" asp-action="EditCinema" asp-route-Id="@Model.Id">Изменить</a>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                }
+                            </div>
+                        </div>
+                        <div class="card mb-4 mb-lg-2">
+                            <div class="card-body p-2 ">
+                                <p class="text-justify">@Model.CinemaDescription</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Название:</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@Model.CinemaName</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Адрес:</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@Model.CinemaAddress</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                @{
+                                    var Director = await UserManager.FindByIdAsync(Model.DirectorId);
+                                }
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Директор:</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @{
+                                            if (Director is null)
+                                            {
+                                                <p class="text-muted mb-0">Директора нет</p>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Members" asp-action="UserProfile" asp-route-id="@Director.Id"><p class="text-muted mb-0">@Director.FirstName @Director.LastName</p></a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Залы:</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @{
+                                            if (Director.Id != userAuth.Id)
+                                            {
+                                                <p class="text-muted mb-0">@TempData["HallsCount"]</p>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Halls" asp-action="Halls" asp-route-id="@Model.Id"><p class="text-muted mb-0">@TempData["HallsCount"]</p></a>
+                                            }
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4 mb-md-0">
+                            <div class="card-body">
+                                <h5 style="text-align:center;">Сотрудники</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Имя</th>
+                                            <th>Фамилия</th>
+                                            <th>Просмотр</th>
+                                            <th>Редактирование</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{
+                                            var employess = await UserManager.Users.Where(x => x.cinemaID == Model.Id.ToString()).ToListAsync();
+                                            foreach (var emp in employess)
+                                            {
+                                                <tr>
+                                                    @if (emp.ProfilePicture == null || emp.ProfilePicture.Length == 0)
+                                                    {
+                                                        <td><img src="/images/userPFP.png" alt="Альтернативное изображение" style="display: inline-block; position: relative; width: 20px; height: 20px; overflow: hidden; border-radius: 50%;" /></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw("<td><img class='circular--landscape' style='display: inline-block; position: relative; width: 20px; height: 20px; overflow: hidden; border-radius: 50%;' src=\"data:image/jpeg;base64,"
+                                                             + Convert.ToBase64String(emp.ProfilePicture) + "\" /></td>")
+                                                    }
+                                                    <td><a style="all:unset;" asp-controller="Members" asp-action="UserProfile" asp-route-id="@emp.Id">@emp.FirstName</a></td>
+                                                    <td><a style="all:unset;" asp-controller="Members" asp-action="UserProfile" asp-route-id="@emp.Id">@emp.LastName</a></td>
+                                                    @if (Model.DirectorId == emp.Id)
+                                                    {
+                                                        <td>Да</td>
+                                                        <td>Да</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (emp.CanRead == true)
+                                                        {
+                                                            <td>Да</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>Нет</td>
+                                                        }
+                                                        if (emp.CanWrite == true)
+                                                        {
+                                                            <td>Да</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>Нет</td>
+                                                        }
+                                                    }
+
+                                                    <td>
+                                                        @if (Model.DirectorId.ToString() == userAuth.Id)
+                                                        {
+                                                            <a class="btn btn-info">Изменить</a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+</main>

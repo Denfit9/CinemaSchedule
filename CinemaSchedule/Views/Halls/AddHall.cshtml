@@ -1,0 +1,24 @@
+﻿@model CinemaSchedule.Models.AddHallViewModel
+
+<h1>Добавление зала</h1>
+<form method="post">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Название зала</label>
+        <div class="col-sm-12">
+            @Html.ValidationMessageFor(m => m.HallName, null, new { @class = "text-danger" })
+            <input type="text" class="form-control" asp-for=HallName>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+        <div class="col-sm-12">
+            @Html.ValidationMessageFor(m => m.HallDescription, null, new { @class = "text-danger" })
+            <textarea class="form-control" rows="10" asp-for="HallDescription"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </div>
+</form>

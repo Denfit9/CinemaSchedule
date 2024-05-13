@@ -37,7 +37,7 @@ namespace CinemaSchedule.Controllers
                 return View(viewModel);
             }
 
-            if (viewModel.NoteName.IsNullOrEmpty())
+            if (viewModel.NoteDescription.IsNullOrEmpty())
             {
                 ModelState.AddModelError(nameof(viewModel.NoteDescription), "Описание заметки должно быть заполнено хотя бы одним символом");
                 return View(viewModel);
@@ -79,7 +79,8 @@ namespace CinemaSchedule.Controllers
         [HttpPost]
         public async Task<IActionResult> EditNote(Note viewModel)
         {
-            if (viewModel.UserId != userManager.GetUserId(User))
+            var note = await dbContext.Notes.FindAsync(viewModel.Id);
+            if (note.UserId != userManager.GetUserId(User))
             {
                 return RedirectToAction("Notes", "Notes");
             }
@@ -89,12 +90,11 @@ namespace CinemaSchedule.Controllers
                 return View(viewModel);
             }
 
-            if (viewModel.NoteName.IsNullOrEmpty())
+            if (viewModel.NoteDescription.IsNullOrEmpty())
             {
                 ModelState.AddModelError(nameof(viewModel.NoteDescription), "Описание заметки должно быть заполнено хотя бы одним символом");
                 return View(viewModel);
             }
-            var note = await dbContext.Notes.FindAsync(viewModel.Id);
 
             if(note is not null)
             {
@@ -111,16 +111,17 @@ namespace CinemaSchedule.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Note viewModel)
         {
-            if (viewModel.UserId != userManager.GetUserId(User))
-            {
-                return RedirectToAction("Notes", "Notes");
-            }
+            
             var note = await dbContext.Notes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == viewModel.Id);
 
             if(note is not null)
             {
+                if (note.UserId != userManager.GetUserId(User))
+                {
+                    return RedirectToAction("Notes", "Notes");
+                }
                 dbContext.Notes.Remove(viewModel);
                 await dbContext.SaveChangesAsync();
             }

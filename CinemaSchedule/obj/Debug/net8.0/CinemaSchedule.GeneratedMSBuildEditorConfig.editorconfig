@@ -54,6 +54,34 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Cinema/AddCinema.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hXEFkZENpbmVtYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Cinema/CinemaProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hXENpbmVtYVByb2ZpbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Cinema/CinemaProfileVisit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hXENpbmVtYVByb2ZpbGVWaXNpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Cinema/EditCinema.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hXEVkaXRDaW5lbWEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Halls/AddHall.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFsbHNcQWRkSGFsbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Halls/EditHall.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFsbHNcRWRpdEhhbGwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Halls/Halls.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFsbHNcSGFsbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

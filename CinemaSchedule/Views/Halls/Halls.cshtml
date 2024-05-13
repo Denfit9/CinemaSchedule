@@ -1,0 +1,47 @@
+﻿@model List<CinemaSchedule.Models.Entities.Hall>
+
+<h1>Залы</h1>
+
+<a class="btn btn-light" asp-controller="Halls" asp-action="AddHall" asp-route-id="@TempData["CinemaId"]">Добавить зал</a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Последнее обновление</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model is null)
+        {
+            
+        }
+        else
+        {
+            
+        @foreach (var hall in Model)
+        {
+            var exploreText = hall.HallDescription;
+            var exploreTextShort = "";
+            if (exploreText != null)
+            {
+                if (exploreText.ToString().Length > 22)
+                {
+                    exploreTextShort = exploreText.ToString().Substring(0, 22);
+                    exploreTextShort = exploreTextShort + "...";
+                }
+                else { exploreTextShort = exploreText; }
+            }
+            <tr>
+                <td>@hall.HallName</td>
+                <td>@exploreTextShort</td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Halls" asp-action="EditHall" asp-route-id="@hall.Id">Изменить</a>
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
