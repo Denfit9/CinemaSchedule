@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Drawing.Printing;
 
@@ -54,6 +55,8 @@ namespace CinemaSchedule.Controllers
             usersData.Term = term;
             return View(usersData);
         }
+
+
         [HttpGet]
         public async Task<IActionResult> UserProfile(Guid id)
         {

@@ -4,6 +4,7 @@ using CinemaSchedule.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaSchedule.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240514181522_movies and countries added")]
+    partial class moviesandcountriesadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,21 +145,6 @@ namespace CinemaSchedule.Migrations
                     b.ToTable("Cinemas");
                 });
 
-            modelBuilder.Entity("CinemaSchedule.Models.Entities.Country", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CountryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
-                });
-
             modelBuilder.Entity("CinemaSchedule.Models.Entities.CountryConnector", b =>
                 {
                     b.Property<Guid>("CountryConnectorId")
@@ -173,7 +161,7 @@ namespace CinemaSchedule.Migrations
 
                     b.HasKey("CountryConnectorId");
 
-                    b.ToTable("CountryConnectors");
+                    b.ToTable("CountryConnector");
                 });
 
             modelBuilder.Entity("CinemaSchedule.Models.Entities.Genre", b =>

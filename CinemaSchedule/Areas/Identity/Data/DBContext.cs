@@ -20,6 +20,11 @@ public class DBContext : IdentityDbContext<User>
     public DbSet<Cinema> Cinemas { get; set; }
 
     public DbSet<Hall> Halls { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<Movie> Movies { get; set; }
+    public DbSet<GenreConnector> GenreConnectors { get; set; }
+    public DbSet<CountryConnector> CountryConnectors { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -3,7 +3,9 @@
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
 <ul class="nav me-auto">
     @if (SignInManager.IsSignedIn(User))
     {
@@ -15,6 +17,9 @@
         </li>
         <li class="nav-item">
             <a style="color:black " asp-controller="Members" asp-action="Members" class="nav-link link-body-emphasis px-2">Пользователи</a>
+        </li>
+        <li class="nav-item">
+            <a style="color:black " asp-controller="Movies" asp-action="Movies" asp-route-id="@userAuth.cinemaID" class="nav-link link-body-emphasis px-2">Фильмы</a>
         </li>
     }
     else

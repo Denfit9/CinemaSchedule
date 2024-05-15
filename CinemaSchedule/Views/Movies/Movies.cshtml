@@ -1,0 +1,56 @@
+﻿@using System.Globalization
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model CinemaSchedule.Models.MoviesViewModel
+
+<h1>Фильмы</h1>
+
+<a class="btn btn-light" asp-controller="Movies" asp-action="AddMovie">Новый фильм</a>
+<table class="table table-hover" style="text-align: center;">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Жанры</th>
+            <th>Страны</th>
+            <th>Возрастной рейтинг</th>
+            <th>Начало проката</th>
+            <th>Конец проката</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Movies.Any())
+        {
+            @foreach (var movie in Model.Movies)
+            {
+                var exploreText = movie.MovieDescription;
+                var exploreTextShort = "";
+                if (exploreText != null)
+                {
+                    if (exploreText.ToString().Length > 35)
+                    {
+                        exploreTextShort = exploreText.ToString().Substring(0, 35);
+                        exploreTextShort = exploreTextShort + "...";
+                    }
+                    else { exploreTextShort = exploreText; }
+                }
+                <tr>
+                    <td style="text-align:left">@movie.MovieName</td>
+                    <td style="text-align:left">@exploreTextShort</td>
+                    <td style="text-align:left">@string.Join(",\r\n", movie.checksGenres);</td>
+                    <td style="text-align:left">@string.Join(",\r\n", movie.checksCountries);</td>
+                    <td style="width:3%">@movie.AgeRestriction+</td>
+                    <td>@movie.StartsAt.ToShortDateString()</td>
+                    <td>@movie.EndsAt.ToShortDateString()</td>
+                    <td>
+                        <a class="btn btn-info" asp-controller="Notes" asp-action="EditNote" asp-route-id="@movie.Id">Изменить</a>
+                    </td>
+                </tr>                
+            }
+        }
+    </tbody>
+</table>

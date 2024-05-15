@@ -1,0 +1,311 @@
+﻿
+@model CinemaSchedule.Models.AddMovieViewModel;
+
+<h1>Новый фильм</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Название заметки</label>
+        <div class="col-sm-12">
+            @Html.ValidationMessageFor(m => m.MovieName, null, new { @class = "text-danger" })
+            <input type="text" class="form-control" asp-for="MovieName">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+        <div class="col-sm-12">
+            @Html.ValidationMessageFor(m => m.MovieDescription, null, new { @class = "text-danger" })
+            <textarea class="form-control" rows="4" asp-for="MovieDescription"></textarea>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Возрастное ограничение:</label>
+        @Html.ValidationMessageFor(m => m.AgeRestriction, null, new { @class = "text-danger" })
+        <div class="col-sm-12">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="AgeRestriction" value=0 checked>
+                <label class="form-check-label" for="inlineRadio1" id="age0">0+</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="AgeRestriction" value=6>
+                <label class="form-check-label" for="inlineRadio2" id="age6">6+</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="AgeRestriction" value=12>
+                <label class="form-check-label" for="inlineRadio3" id="age12">12+</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="AgeRestriction" value=16>
+                <label class="form-check-label" for="inlineRadio3" id="age16">16+</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="AgeRestriction" value=18>
+                <label class="form-check-label" for="inlineRadio3" id="age18">18+</label>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <div class="row">
+        <div class="col-6 col-sm-2">
+        <label for="exampleFormControlTextarea1" class="form-label">Жанр(ы)</label>
+        <div class="col-6 col-sm-4 ms-lg-3">
+            <div class="row align-items-start">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" name="checksGenres" type="checkbox"  id="Biography" value="Биография" />
+                <label class="form-check-label" for="flexCheckDefault">Биография</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Action" value="Боевик">
+                <label class="form-check-label" for="flexCheckDefault">Боевик</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Western" value="Вестерн">
+                <label class="form-check-label" for="flexCheckDefault">Вестерн</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Military" value="Военный">
+                <label class="form-check-label" for="flexCheckDefault">Военный</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Kids" value="Детский">
+                <label class="form-check-label" for="flexCheckDefault">Детский</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Documental" value="Документальный">
+                <label class="form-check-label" for="flexCheckDefault">Документальный</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Drama" value="Драма">
+                <label class="form-check-label" for="flexCheckDefault">Драма</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Detective" value="Детектив">
+                <label class="form-check-label" for="flexCheckDefault">Детектив</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Historical" value="Исторический">
+                <label class="form-check-label" for="flexCheckDefault">Исторический</label>
+            </div>
+            <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Comedy" value="Комедия">
+                <label class="form-check-label" for="flexCheckDefault">Комедия</label>
+            </div>
+            </div>
+        </div>
+        </div>
+            <div class="col-6 col-sm-3">
+                <label for="exampleFormControlTextarea1" class="form-label">&nbsp;</label>
+                <div class="col-6 col-sm-4 ms-lg-3">
+                    <div class="row align-items-start">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Criminal" value="Криминал">
+                            <label class="form-check-label" for="flexCheckDefault">Криминал</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Cartoon" value="Мультфильм">
+                            <label class="form-check-label" for="flexCheckDefault">Мультфильм</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Melodrama" value="Мелодрама">
+                            <label class="form-check-label" for="flexCheckDefault">Мелодрама</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Musical" value="Мьюзикл">
+                            <label class="form-check-label" name="checksGenres" for="flexCheckDefault">Мьюзикл</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Noir" value="Нуар">
+                            <label class="form-check-label" for="flexCheckDefault">Нуар</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Family" value="Семейный">
+                            <label class="form-check-label" for="flexCheckDefault">Семейный</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Sports" value="Спортивный">
+                            <label class="form-check-label" for="flexCheckDefault">Спортивный</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Horror" value="Ужасы">
+                            <label class="form-check-label" for="flexCheckDefault">Ужасы</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksGenres" type="checkbox" id="Fantasy" value="Фэнтези">
+                            <label class="form-check-label" for="flexCheckDefault">Фэнтези</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-2">
+                <label for="exampleFormControlTextarea1" class="form-label">Страна(страны)</label>
+                @Html.ValidationMessageFor(m => m.checksCountries, null, new { @class = "text-danger" })
+                    <div class="col-6 col-sm-4 ms-lg-3">
+                        <div class="row align-items-start">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="checksCountries" type="checkbox" id="Russia" value="Россия">
+                                <label class="form-check-label" for="flexCheckDefault">Россия</label>
+                            </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Belarus" value="Беларусь">
+                            <label class="form-check-label" for="flexCheckDefault">Беларусь</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="USA" value="США">
+                            <label class="form-check-label" for="flexCheckDefault">США</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="USSR" value="СССР">
+                            <label class="form-check-label" for="flexCheckDefault">СССР</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Kazakhstan" value="Казахстан">
+                            <label class="form-check-label" for="flexCheckDefault">Казахстан</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Ukraine" value="Украина">
+                            <label class="form-check-label" for="flexCheckDefault">Украина</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="France" value="Франция">
+                            <label class="form-check-label" for="flexCheckDefault">Франция</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="SouthKorea" value="Южная Корея">
+                            <label class="form-check-label" for="flexCheckDefault">Южная Корея</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Britain" value="Великобритания">
+                            <label class="form-check-label" for="flexCheckDefault">Великобритания</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Japan" value="Япония">
+                            <label class="form-check-label" for="flexCheckDefault">Япония</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Italy" value="Италия">
+                            <label class="form-check-label" for="flexCheckDefault">Италия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Spain" value="Испания">
+                            <label class="form-check-label" for="flexCheckDefault">Испания</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Sweden" value="Швеция">
+                            <label class="form-check-label" for="flexCheckDefault">Швеция</label>
+                        </div>
+                        
+                        </div>
+                    </div>
+            </div>
+
+        <div class="col-6 col-sm-2">
+            <label for="exampleFormControlTextarea1" class="form-label">&nbsp;</label>
+            <div class="col-6 col-sm-4 ms-lg-3">
+                <div class="row align-items-start">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Germany" value="Германия">
+                            <label class="form-check-label" for="flexCheckDefault">Германия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Turkey" value="Турция">
+                            <label class="form-check-label" for="flexCheckDefault">Турция</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Denmark" value="Дания">
+                            <label class="form-check-label" for="flexCheckDefault">Дания</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Norway" value="Норвегия">
+                            <label class="form-check-label" for="flexCheckDefault">Норвегия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Honkong" value="Гонконг">
+                            <label class="form-check-label" for="flexCheckDefault">Гонконг</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="China" value="Китай">
+                            <label class="form-check-label" for="flexCheckDefault">Китай</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Australia" value="Австралия">
+                            <label class="form-check-label" for="flexCheckDefault">Австралия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Belgium" value="Бельгия">
+                            <label class="form-check-label" for="flexCheckDefault">Бельгия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Netherlands" value="Нидерланды">
+                            <label class="form-check-label" for="flexCheckDefault">Нидерланды</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Greece" value="Греция">
+                            <label class="form-check-label" for="flexCheckDefault">Греция</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Austria" value="Австрия">
+                            <label class="form-check-label" for="flexCheckDefault">Австрия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="India" value="Индия">
+                            <label class="form-check-label" for="flexCheckDefault">Индия</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="checksCountries" type="checkbox" id="Others" value="Другие">
+                            <label class="form-check-label" for="flexCheckDefault">Другие</label>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="col-6 col-sm-2">
+                <label for="exampleFormControlTextarea1" class="form-label">Другое</label>
+                <div class="col-12">
+                    <div class="row align-items-start">
+                        <label for="minutes">Часы:</label>
+                        <div class="col-6 col-sm-6">
+                        <div class="ms-lg-0">
+                                <select class="form-select" aria-label="Default select example" id="minutes" name="Hours" asp-for="Hours">
+                                    @for (int i = 0; i <= 59; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                        </div>
+                        <label for="minutes">Минуты:</label>
+                                @Html.ValidationMessageFor(m => m.Minutes, null, new { @class = "text-danger" })
+                            <div class="col-6 col-sm-6">
+                        <div class="ms-lg-0">
+                                <select class="form-select" aria-label="Default select example" id="minutes" name="Minutes" asp-for="Minutes">
+                            @for (int i = 0; i <= 59; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                            </select>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-4 col-sm-8">
+                            <label for="releaseDate">Начало проката:</label>
+                            @Html.ValidationMessageFor(m => m.StartsAt, null, new { @class = "text-danger" })
+                            <div class="ms-lg-0">
+                    <input class="form-control" type="date" id="StartsAt" name="StartsAt" asp-for="StartsAt">
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-8">
+                            <label for="releaseDate">Конец проката:</label>
+                            @Html.ValidationMessageFor(m => m.EndsAt, null, new { @class = "text-danger" })
+                            <div class="ms-lg-0">
+                    <input class="form-control" type="date" id="EndsAt" name="EndsAt" asp-for="EndsAt">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+        </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </div>
+</form>
