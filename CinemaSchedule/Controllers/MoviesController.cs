@@ -5,7 +5,9 @@ using CinemaSchedule.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace CinemaSchedule.Controllers
 {
@@ -112,6 +114,10 @@ namespace CinemaSchedule.Controllers
             {
                 return RedirectToAction("CinemaProfile", "Cinema");
             }
+            if (user.CanWrite != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
             if (TempData["Cinema"].ToString() != null)
             {
                 if (user.cinemaID != TempData["Cinema"].ToString())
@@ -211,16 +217,19 @@ namespace CinemaSchedule.Controllers
 
             var allGenres = dbContext.Genres.ToList();
             var genreIds = new List<Guid>();
-
-            foreach (var genreName in viewModel.checksGenres)
+            if(viewModel.checksGenres is not null)
             {
-                var genre = allGenres.FirstOrDefault(g => g.GenreName == genreName);
-
-                if (genre != null)
+                foreach (var genreName in viewModel.checksGenres)
                 {
-                    genreIds.Add(genre.Id);
+                    var genre = allGenres.FirstOrDefault(g => g.GenreName == genreName);
+
+                    if (genre != null)
+                    {
+                        genreIds.Add(genre.Id);
+                    }
                 }
             }
+            
 
             var allCountries = dbContext.Countries.ToList();
             var countryIds = new List<Guid>();
@@ -258,6 +267,301 @@ namespace CinemaSchedule.Controllers
                 await dbContext.CountryConnectors.AddAsync(countryConnector);
             }
             await dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Movies", "Movies");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditMovie(Guid id)
+        {
+            var movie = await dbContext.Movies.FindAsync(id);
+            User user = await userManager.GetUserAsync(User);
+            TempData["Cinema"] = TempData["Cinema"];
+            if (movie.CinemaId != user.cinemaID)
+            {
+                return RedirectToAction("Movies", "Movies");
+            }
+            if (user.CanRead != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (user.CanWrite != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (TempData["Cinema"].ToString() != null)
+            {
+                if (user.cinemaID != TempData["Cinema"].ToString())
+                {
+                    return RedirectToAction("CinemaProfile", "Cinema");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+
+            var allMovies = dbContext.Movies.Where(x => x.CinemaId == user.cinemaID.ToString()).ToList();
+            var exactMovie = allMovies.FirstOrDefault(x => x.Id == id);
+
+            var allGenresConn = dbContext.GenreConnectors.ToList();
+            var allGenres = dbContext.Genres.ToList();
+            var allCountriesConn = dbContext.CountryConnectors.ToList();
+            var allCountries = dbContext.Countries.ToList();
+
+            var genres = new List<string>();
+            var countries = new List<string>();
+
+            var genreIds = allGenresConn
+                .Where(g => g.MovieId == movie.Id.ToString())
+                .Select(g => new Guid(g.GenreId))
+                .ToList();
+
+            var countryIds = allCountriesConn
+                .Where(c => c.MovieId == movie.Id.ToString())
+                .Select(c => new Guid(c.CountryId))
+                .ToList();
+
+            foreach (var genreId in genreIds)
+            {
+                var genreName = allGenres.FirstOrDefault(g => g.Id == genreId)?.GenreName;
+                if (genreName != null)
+                {
+                    genres.Add(genreName);
+                }
+            }
+
+            foreach (var countryId in countryIds)
+            {
+                var countryName = allCountries.FirstOrDefault(c => c.Id == countryId)?.CountryName;
+                if (countryName != null)
+                {
+                    countries.Add(countryName);
+                }
+            }
+
+            var durationHours = movie.Duration / 3600;
+            var durationMinutes = (movie.Duration % 3600) / 60;
+
+            MovieViewModel exactMovieVM = new MovieViewModel
+            {
+                Id = movie.Id,
+                MovieName = movie.MovieName,
+                MovieDescription = movie.MovieDescription,
+                CinemaId = movie.CinemaId,
+                Duration = movie.Duration,
+                Hours = durationHours,
+                Minutes = durationMinutes,
+                AgeRestriction = movie.AgeRestriction,
+                StartsAt = movie.StartsAt,
+                EndsAt = movie.EndsAt,
+                checksGenres = genres,
+                checksCountries = countries
+            };
+            TempData["Cinema"] = TempData["Cinema"];
+
+            return View(exactMovieVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMovie(MovieViewModel movieViewModel)
+        {
+            TempData["Cinema"] = TempData["Cinema"];
+            bool error = false;
+            User user = await userManager.GetUserAsync(User);
+            if (user.CanRead != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (user.CanWrite != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (TempData["Cinema"].ToString() != null)
+            {
+                if (user.cinemaID != TempData["Cinema"].ToString())
+                {
+                    return RedirectToAction("CinemaProfile", "Cinema");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (movieViewModel.MovieName.IsNullOrEmpty())
+            {
+                ModelState.AddModelError(nameof(movieViewModel.MovieName), "Название фильма должно быть заполнено хотя бы одним символом");
+                error = true;
+            }
+
+            if (movieViewModel.MovieDescription.IsNullOrEmpty())
+            {
+                ModelState.AddModelError(nameof(movieViewModel.MovieDescription), "Описание фильма должно быть заполнено хотя бы одним символом");
+                error = true;
+            }
+            if (movieViewModel.checksCountries.IsNullOrEmpty())
+            {
+                ModelState.AddModelError(nameof(movieViewModel.checksCountries), "Необходимо выбрать хотя бы одну страну или \"Другое\"");
+                error = true;
+            }
+            if (movieViewModel.AgeRestriction == null)
+            {
+                ModelState.AddModelError(nameof(movieViewModel.AgeRestriction), "Необходимо выбрать возрастное ограничение");
+                error = true;
+            }
+            if (movieViewModel.StartsAt == DateTime.MinValue || movieViewModel.StartsAt == null)
+            {
+                ModelState.AddModelError(nameof(movieViewModel.StartsAt), "Необходимо выбрать дату начала проката");
+                error = true;
+            }
+            if (movieViewModel.EndsAt == DateTime.MinValue || movieViewModel.EndsAt == null)
+            {
+                ModelState.AddModelError(nameof(movieViewModel.EndsAt), "Необходимо выбрать дату конца проката");
+                error = true;
+            }
+            if (movieViewModel.EndsAt <= movieViewModel.StartsAt)
+            {
+                ModelState.AddModelError(nameof(movieViewModel.EndsAt), "Конец проката должен быть позже его начала");
+                error = true;
+            }
+            if (movieViewModel.Hours == 0 && movieViewModel.Minutes == 0)
+            {
+                ModelState.AddModelError(nameof(movieViewModel.Minutes), "Минимальная продолжительность фильма 1 минута");
+                error = true;
+            }
+            TempData["Cinema"] = TempData["Cinema"];
+            if (error)
+            {
+                return View(movieViewModel);
+            }
+            movieViewModel.Duration = movieViewModel.Hours * 3600 + movieViewModel.Minutes * 60;
+
+            var movie = await dbContext.Movies.FindAsync(movieViewModel.Id);
+            if(movie is not null)
+            {
+                movie.MovieName = movieViewModel.MovieName;
+                movie.MovieDescription = movieViewModel.MovieDescription;
+                movie.Duration = movieViewModel.Duration;
+                movie.CinemaId = user.cinemaID;
+                movie.AgeRestriction = movieViewModel.AgeRestriction;
+                movie.StartsAt = movieViewModel.StartsAt;
+                movie.EndsAt = movieViewModel.EndsAt;
+                await dbContext.SaveChangesAsync();
+            }
+
+            var movieID = movie.Id;
+
+            var allGenres = dbContext.Genres.ToList();
+            var genreIds = new List<Guid>();
+            if (movieViewModel.checksGenres is not null)
+            {
+                foreach (var genreName in movieViewModel.checksGenres)
+                {
+                    var genre = allGenres.FirstOrDefault(g => g.GenreName == genreName);
+
+                    if (genre != null)
+                    {
+                        genreIds.Add(genre.Id);
+                    }
+                }
+            }
+
+
+            var allCountries = dbContext.Countries.ToList();
+            var countryIds = new List<Guid>();
+
+            foreach (var countryName in movieViewModel.checksCountries)
+            {
+                var country = allCountries.FirstOrDefault(g => g.CountryName == countryName);
+
+                if (country != null)
+                {
+                    countryIds.Add(country.Id);
+                }
+            }
+
+            var genreConnectorsToDelete = dbContext.GenreConnectors.Where(gc => gc.MovieId == movie.Id.ToString());
+
+            dbContext.GenreConnectors.RemoveRange(genreConnectorsToDelete);
+            dbContext.SaveChanges();
+
+            foreach (var genreId in genreIds)
+            {
+                
+
+                var genreConnector = new GenreConnector
+                {
+                    MovieId = movieID.ToString(),
+                    GenreId = genreId.ToString()
+                };
+
+                await dbContext.GenreConnectors.AddAsync(genreConnector);
+            }
+            await dbContext.SaveChangesAsync();
+
+            var countryConnectorsToDelete = dbContext.CountryConnectors.Where(gc => gc.MovieId == movie.Id.ToString());
+
+            dbContext.CountryConnectors.RemoveRange(countryConnectorsToDelete);
+            dbContext.SaveChanges();
+
+            foreach (var countryId in countryIds)
+            {
+                
+
+                var countryConnector = new CountryConnector
+                {
+                    MovieId = movieID.ToString(),
+                    CountryId = countryId.ToString()
+                };
+
+                await dbContext.CountryConnectors.AddAsync(countryConnector);
+            }
+            await dbContext.SaveChangesAsync();
+            return RedirectToAction("Movies", "Movies");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(MovieViewModel movieViewModel)
+        {
+            TempData["Cinema"] = TempData["Cinema"];
+            User user = await userManager.GetUserAsync(User);
+            if (user.CanRead != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (user.CanWrite != true)
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+            if (TempData["Cinema"].ToString() != null)
+            {
+                if (user.cinemaID != TempData["Cinema"].ToString())
+                {
+                    return RedirectToAction("CinemaProfile", "Cinema");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CinemaProfile", "Cinema");
+            }
+
+            var movie = await dbContext.Movies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == movieViewModel.Id);
+
+            if (movie is not null)
+            {
+
+                dbContext.Movies.Remove(movie);
+                await dbContext.SaveChangesAsync();
+                var genreConnectorsToDelete = dbContext.GenreConnectors.Where(gc => gc.MovieId == movie.Id.ToString());
+
+                dbContext.GenreConnectors.RemoveRange(genreConnectorsToDelete);
+                dbContext.SaveChanges();
+                var countryConnectorsToDelete = dbContext.CountryConnectors.Where(gc => gc.MovieId == movie.Id.ToString());
+
+                dbContext.CountryConnectors.RemoveRange(countryConnectorsToDelete);
+                dbContext.SaveChanges();
+            }
 
             return RedirectToAction("Movies", "Movies");
         }

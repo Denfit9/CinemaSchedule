@@ -17,6 +17,7 @@
             <th>Жанры</th>
             <th>Страны</th>
             <th>Возрастной рейтинг</th>
+            <th>Продолжительность</th>
             <th>Начало проката</th>
             <th>Конец проката</th>
             <th></th>
@@ -41,13 +42,21 @@
                 <tr>
                     <td style="text-align:left">@movie.MovieName</td>
                     <td style="text-align:left">@exploreTextShort</td>
-                    <td style="text-align:left">@string.Join(",\r\n", movie.checksGenres);</td>
-                    <td style="text-align:left">@string.Join(",\r\n", movie.checksCountries);</td>
+                    <td style="text-align:left">@string.Join(",\r\n", movie.checksGenres)</td>
+                    <td style="text-align:left">@string.Join(",\r\n", movie.checksCountries)</td>
                     <td style="width:3%">@movie.AgeRestriction+</td>
+                    @if(movie.Hours == 0)
+                    {
+                        <td style="text-align:left">@movie.Minutes минут (@(movie.Duration/60) минут) </td>
+                    }
+                    else
+                    {
+                        <td style="text-align:left">@movie.Hours ч. @movie.Minutes минут (@(movie.Duration / 60) минут) </td>
+                    }
                     <td>@movie.StartsAt.ToShortDateString()</td>
                     <td>@movie.EndsAt.ToShortDateString()</td>
                     <td>
-                        <a class="btn btn-info" asp-controller="Notes" asp-action="EditNote" asp-route-id="@movie.Id">Изменить</a>
+                        <a class="btn btn-info" asp-controller="Movies" asp-action="EditMovie" asp-route-id="@movie.Id">Изменить</a>
                     </td>
                 </tr>                
             }
