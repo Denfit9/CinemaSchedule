@@ -1,14 +1,36 @@
 ﻿@using System.Globalization
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
 }
 @model CinemaSchedule.Models.MoviesViewModel
 
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main class="container">
 <h1>Фильмы</h1>
+    <form asp-action="Movies" class="row g-3 mb-3" id="searchForm">
+        <div class="col-auto" style="width:65%">
+            <label class="form-check-label" for="flexCheckDefault">Название</label>
+            <input type="text" class="form-control" placeholder="Поиск фильма" name="term" asp-for="Term">
+        </div>
+        <div class="col-auto">
+            <label class="form-check-label" for="flexCheckDefault">Начало проката</label>
+            <input type="date" class="form-control"  name="startsAt" asp-for="StartsAt">
+        </div>
+        <div class="col-auto">
+            <label class="form-check-label" for="flexCheckDefault">Конец проката</label>
+            <input type="date" class="form-control" name="endsAt" asp-for="EndsAt">
+        </div>
+
+        <div class="col-auto">
+            <p style="height:7px">&nbsp;</p>
+            <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+        </div>
+    </form>
 
 <a class="btn btn-light" asp-controller="Movies" asp-action="AddMovie">Новый фильм</a>
+<hr/>
 <table class="table table-hover" style="text-align: center;">
     <thead>
         <tr>
@@ -63,3 +85,32 @@
         }
     </tbody>
 </table>
+<div id="footer">
+    <ul class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="/Movies/Movies?term=@Model.Term&CurrentPage=@(Model.CurrentPage-1)" aria-label="Previous">&laquo;</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.CurrentPage)
+            {
+                <li class="page-item active" aria-current="page"><a class="page-link" href="/Movies/Movies?term=@Model.Term&CurrentPage=@Model.CurrentPage">@i</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Movies/Movies?term=@Model.Term&CurrentPage=@i">@i</a></li>
+            }
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="/Movies/Movies?term=@Model.Term&CurrentPage=@(Model.CurrentPage+1)" aria-label="Next">&raquo;</a>
+            </li>
+        }
+    </ul>
+</div>
+</main>

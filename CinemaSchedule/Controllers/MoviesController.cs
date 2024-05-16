@@ -22,8 +22,9 @@ namespace CinemaSchedule.Controllers
             this.dbContext = dBContext;
             this.userManager = userManager;
         }
-        public async Task<IActionResult> Movies(Guid Id)
+        public async Task<IActionResult> Movies(Guid Id, string term = "", int currentPage = 1, DateTime? endsAt = null, DateTime? startsAt=null, string orderBy = "")
         {
+            term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
             if (Id == Guid.Empty)
             {
                 TempData["Cinema"] = TempData["Cinema"];
@@ -40,7 +41,46 @@ namespace CinemaSchedule.Controllers
             }
             TempData["Cinema"] = Id;
 
-            var allMovies = dbContext.Movies.Where(x => x.CinemaId == Id.ToString()).ToList();
+            var allMovies = (from u in dbContext.Movies
+                             where term == "" || u.MovieName.ToLower().Contains(term)
+                             select new Movie
+                             {
+                                 Id = u.Id,
+                                 MovieName = u.MovieName,
+                                 MovieDescription = u.MovieDescription,
+                                 Duration = u.Duration,
+                                 AgeRestriction = u.AgeRestriction,
+                                 CinemaId = u.CinemaId,
+                                 StartsAt = u.StartsAt,
+                                 EndsAt = u.EndsAt,
+                             }
+                        ).Where(x => x.CinemaId == Id.ToString()).ToList();
+            if(startsAt is not null)
+            {
+                allMovies = allMovies.Where(x=>x.StartsAt >= startsAt).ToList();
+            }
+            if(endsAt is not null)
+            {
+                allMovies = allMovies.Where(x => x.EndsAt <= endsAt).ToList();
+            }
+            var moviesData = new MoviesViewModel();
+            moviesData.sortByStart = string.IsNullOrEmpty(orderBy) ? "start_desc" : "";
+            moviesData.sortByEnd = orderBy == "end" ? "end_desc" : "end";
+            switch (orderBy)
+            {
+                case "start_desc":
+                    allMovies = allMovies.OrderByDescending(x => x.StartsAt).ToList();
+                    break;
+                case "end_desc":
+                    allMovies = allMovies.OrderByDescending(x => x.EndsAt).ToList();
+                    break;
+                case "end":
+                    allMovies = allMovies.OrderBy(x => x.EndsAt).ToList();
+                    break;
+                default:
+                    allMovies = allMovies.OrderBy(x => x.StartsAt).ToList();
+                    break;
+            }
             var allMoviesModel = new List<MovieViewModel>();
             var allGenresConn = dbContext.GenreConnectors.ToList();
             var allGenres = dbContext.Genres.ToList();
@@ -100,8 +140,21 @@ namespace CinemaSchedule.Controllers
             }
 
 
-            var moviesData = new MoviesViewModel();
+
             moviesData.Movies = allMoviesModel.AsQueryable();
+            var totalRecords = moviesData.Movies.Count();
+            int pageSize = 6;
+            var totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+            if (currentPage > totalPages || currentPage < totalPages)
+            {
+                currentPage = 1;
+            }
+            moviesData.Movies = moviesData.Movies.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            moviesData.Movies = moviesData.Movies;
+            moviesData.CurrentPage = currentPage;
+            moviesData.TotalPages = totalPages;
+            moviesData.PageSize = pageSize;
+            moviesData.Term = term;
 
             return View(moviesData);
         }
