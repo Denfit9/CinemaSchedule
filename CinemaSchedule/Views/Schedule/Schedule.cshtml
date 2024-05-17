@@ -3,3 +3,63 @@
 *@
 @{
 }
+
+@model CinemaSchedule.Models.ScheduleViewModel
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main>
+    <h1>Расписание</h1>
+    <a class="btn btn-light" href="/Schedule/NewEvent?date=2024-05-17">Новое событие</a>
+    @if(Model is not null)
+    {
+        <div class="timeline-container">
+            <div class="venue-row">
+                
+
+
+
+        @foreach(var hall in Model.HallsSchedules)
+        {
+                <div class="venue-column">
+                    <div class="venue">@hall.HallName</div>
+                        @if(hall.Events is not null)
+                        {
+                            <div class="timeline-event">
+                                <div class="event-title">Событие 2.2</div>
+                                <div class="event-details">
+                                    <div class="event-detail">Тип: фильм</div>
+                                    <div class="event-detail">Начало: 10:00</div>
+                                    <div class="event-detail">Конец: 12:40</div>
+                                    <div class="event-detail">Продолжительность 2 часа 40 минут</div>
+                                </div>
+                            </div>
+                            <div class="timeline-event">
+                                <div class="event-title">Событие 2.2</div>
+                                <div class="event-details">
+                                    <div class="event-detail">Деталь 1</div>
+                                    <div class="event-detail">Деталь 2</div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="event-title"><a style="text-align:center; padding-top:5px;">Событий нет</a></div>
+                            
+                        }
+
+                </div>
+        }
+
+            </div>
+        </div>
+    }
+    else
+    {
+        
+    }
+   
+
+</main>

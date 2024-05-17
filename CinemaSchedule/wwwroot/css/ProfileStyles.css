@@ -20,3 +20,55 @@
     position: absolute;
     right: 0;
 }
+.timeline-container {
+    display: flex;
+    overflow-x: auto; /* Разрешить горизонтальную прокрутку */
+    white-space: nowrap; /* Запрет переноса строк */
+    height: 74vh;
+}
+
+.venue-row {
+    display: inline-flex; /* Добавить поддержку горизонтального скролла */
+}
+
+.venue-column {
+    flex-shrink: 0; /* Запретить уменьшение размера блока */
+    margin-right: 20px; /* Отступ между залами */
+}
+
+.venue {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    width:350px;
+    text-align: center;
+}
+
+.scrollbar {
+    overflow-y: auto; /* Разрешить вертикальную прокрутку внутри колонки */
+    max-height: 74vh; /* Ограничить высоту, чтобы избежать бесконечного роста */
+}
+
+.timeline-event {
+    margin-bottom: 5px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    padding:10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: normal; /* Разрешить перенос текста в событиях */
+}
+
+.event-title {
+    font-weight: bold;
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    align-items: flex-end;
+}
+
+.event-detail {
+    margin-right: 5px;
+}

@@ -271,6 +271,13 @@
           }
         }
       },
+      "fullcalendar/3.9.0": {
+        "type": "package",
+        "dependencies": {
+          "Moment.js": "2.9.0",
+          "jQuery": "2.0.0"
+        }
+      },
       "Humanizer/2.14.1": {
         "type": "package",
         "dependencies": {
@@ -864,6 +871,9 @@
             "locale": "zh-Hant"
           }
         }
+      },
+      "jQuery/2.0.0": {
+        "type": "package"
       },
       "Microsoft.AspNetCore.Cryptography.Internal/8.0.4": {
         "type": "package",
@@ -2309,6 +2319,9 @@
           }
         }
       },
+      "Moment.js/2.9.0": {
+        "type": "package"
+      },
       "Mono.TextTemplating/2.3.1": {
         "type": "package",
         "dependencies": {
@@ -3302,6 +3315,97 @@
         "contentFiles/any/any/wwwroot/js/bootstrap.min.js.map"
       ]
     },
+    "fullcalendar/3.9.0": {
+      "sha512": "Lx1CYPPY8AGVtkDHKl+gjVjD2SKGBi3WC+gEU/qn848HRnO/po3KurcYoblr1Yyp6Iia8kXffYZy62adAHNj+A==",
+      "type": "package",
+      "path": "fullcalendar/3.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/Content/fullcalendar.css",
+        "content/Content/fullcalendar.min.css",
+        "content/Content/fullcalendar.print.css",
+        "content/Content/fullcalendar.print.min.css",
+        "content/Scripts/fullcalendar/fullcalendar.js",
+        "content/Scripts/fullcalendar/fullcalendar.min.js",
+        "content/Scripts/fullcalendar/gcal.js",
+        "content/Scripts/fullcalendar/gcal.min.js",
+        "content/Scripts/fullcalendar/locale-all.js",
+        "content/Scripts/fullcalendar/locale/af.js",
+        "content/Scripts/fullcalendar/locale/ar-dz.js",
+        "content/Scripts/fullcalendar/locale/ar-kw.js",
+        "content/Scripts/fullcalendar/locale/ar-ly.js",
+        "content/Scripts/fullcalendar/locale/ar-ma.js",
+        "content/Scripts/fullcalendar/locale/ar-sa.js",
+        "content/Scripts/fullcalendar/locale/ar-tn.js",
+        "content/Scripts/fullcalendar/locale/ar.js",
+        "content/Scripts/fullcalendar/locale/bg.js",
+        "content/Scripts/fullcalendar/locale/bs.js",
+        "content/Scripts/fullcalendar/locale/ca.js",
+        "content/Scripts/fullcalendar/locale/cs.js",
+        "content/Scripts/fullcalendar/locale/da.js",
+        "content/Scripts/fullcalendar/locale/de-at.js",
+        "content/Scripts/fullcalendar/locale/de-ch.js",
+        "content/Scripts/fullcalendar/locale/de.js",
+        "content/Scripts/fullcalendar/locale/el.js",
+        "content/Scripts/fullcalendar/locale/en-au.js",
+        "content/Scripts/fullcalendar/locale/en-ca.js",
+        "content/Scripts/fullcalendar/locale/en-gb.js",
+        "content/Scripts/fullcalendar/locale/en-ie.js",
+        "content/Scripts/fullcalendar/locale/en-nz.js",
+        "content/Scripts/fullcalendar/locale/es-do.js",
+        "content/Scripts/fullcalendar/locale/es-us.js",
+        "content/Scripts/fullcalendar/locale/es.js",
+        "content/Scripts/fullcalendar/locale/et.js",
+        "content/Scripts/fullcalendar/locale/eu.js",
+        "content/Scripts/fullcalendar/locale/fa.js",
+        "content/Scripts/fullcalendar/locale/fi.js",
+        "content/Scripts/fullcalendar/locale/fr-ca.js",
+        "content/Scripts/fullcalendar/locale/fr-ch.js",
+        "content/Scripts/fullcalendar/locale/fr.js",
+        "content/Scripts/fullcalendar/locale/gl.js",
+        "content/Scripts/fullcalendar/locale/he.js",
+        "content/Scripts/fullcalendar/locale/hi.js",
+        "content/Scripts/fullcalendar/locale/hr.js",
+        "content/Scripts/fullcalendar/locale/hu.js",
+        "content/Scripts/fullcalendar/locale/id.js",
+        "content/Scripts/fullcalendar/locale/is.js",
+        "content/Scripts/fullcalendar/locale/it.js",
+        "content/Scripts/fullcalendar/locale/ja.js",
+        "content/Scripts/fullcalendar/locale/ka.js",
+        "content/Scripts/fullcalendar/locale/kk.js",
+        "content/Scripts/fullcalendar/locale/ko.js",
+        "content/Scripts/fullcalendar/locale/lb.js",
+        "content/Scripts/fullcalendar/locale/lt.js",
+        "content/Scripts/fullcalendar/locale/lv.js",
+        "content/Scripts/fullcalendar/locale/mk.js",
+        "content/Scripts/fullcalendar/locale/ms-my.js",
+        "content/Scripts/fullcalendar/locale/ms.js",
+        "content/Scripts/fullcalendar/locale/nb.js",
+        "content/Scripts/fullcalendar/locale/nl-be.js",
+        "content/Scripts/fullcalendar/locale/nl.js",
+        "content/Scripts/fullcalendar/locale/nn.js",
+        "content/Scripts/fullcalendar/locale/pl.js",
+        "content/Scripts/fullcalendar/locale/pt-br.js",
+        "content/Scripts/fullcalendar/locale/pt.js",
+        "content/Scripts/fullcalendar/locale/ro.js",
+        "content/Scripts/fullcalendar/locale/ru.js",
+        "content/Scripts/fullcalendar/locale/sk.js",
+        "content/Scripts/fullcalendar/locale/sl.js",
+        "content/Scripts/fullcalendar/locale/sq.js",
+        "content/Scripts/fullcalendar/locale/sr-cyrl.js",
+        "content/Scripts/fullcalendar/locale/sr.js",
+        "content/Scripts/fullcalendar/locale/sv.js",
+        "content/Scripts/fullcalendar/locale/th.js",
+        "content/Scripts/fullcalendar/locale/tr.js",
+        "content/Scripts/fullcalendar/locale/uk.js",
+        "content/Scripts/fullcalendar/locale/vi.js",
+        "content/Scripts/fullcalendar/locale/zh-cn.js",
+        "content/Scripts/fullcalendar/locale/zh-tw.js",
+        "fullcalendar.3.9.0.nupkg.sha512",
+        "fullcalendar.nuspec"
+      ]
+    },
     "Humanizer/2.14.1": {
       "sha512": "/FUTD3cEceAAmJSCPN9+J+VhGwmL/C12jvwlyM1DFXShEMsBzvLzLqSrJ2rb+k/W2znKw7JyflZgZpyE+tI7lA==",
       "type": "package",
@@ -4046,6 +4150,26 @@
         "lib/netstandard1.0/zh-Hant/Humanizer.resources.dll",
         "lib/netstandard2.0/zh-Hant/Humanizer.resources.dll",
         "logo.png"
+      ]
+    },
+    "jQuery/2.0.0": {
+      "sha512": "u3YiE0QnFnBExPkBPqWr2EVd8nh01iQlMWPRfa7b1fQ53YuMtHw+Y9oaJukHtEHaMpyL0PJzq69y3/5AxWogGA==",
+      "type": "package",
+      "path": "jquery/2.0.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Scripts/jquery-2.0.0-vsdoc.js",
+        "Content/Scripts/jquery-2.0.0.js",
+        "Content/Scripts/jquery-2.0.0.min.js",
+        "Content/Scripts/jquery-2.0.0.min.map",
+        "Tools/common.ps1",
+        "Tools/install.ps1",
+        "Tools/jquery-2.0.0.intellisense.js",
+        "Tools/uninstall.ps1",
+        "jquery.2.0.0.nupkg.sha512",
+        "jquery.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.4": {
@@ -7065,6 +7189,21 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Moment.js/2.9.0": {
+      "sha512": "4rhbvFzmgXp/gjvwjxt9Qjmdz+2CD9T99erXEDtZHlYxaI06F9A4628/Vpxklm8D9RmwJjKjp1244FwEh+a5WQ==",
+      "type": "package",
+      "path": "moment.js/2.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Scripts/moment-with-locales.js",
+        "Content/Scripts/moment-with-locales.min.js",
+        "Content/Scripts/moment.js",
+        "Content/Scripts/moment.min.js",
+        "moment.js.2.9.0.nupkg.sha512",
+        "moment.js.nuspec"
+      ]
+    },
     "Mono.TextTemplating/2.3.1": {
       "sha512": "pqYwzNqDL0QK1JFpAjpI/NPqyqLGpHLvVmA5Ec0LaSnbIDtEXxu0td16uunegb7c8xAnlcm4qkbIYUP5FfrFpA==",
       "type": "package",
@@ -8635,6 +8774,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "FullCalendar >= 3.9.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.4",
       "Microsoft.AspNetCore.Identity.UI >= 8.0.4",
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 8.0.4",
@@ -8693,6 +8833,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "FullCalendar": {
+            "target": "Package",
+            "version": "[3.9.0, )"
+          },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
             "version": "[8.0.4, )"

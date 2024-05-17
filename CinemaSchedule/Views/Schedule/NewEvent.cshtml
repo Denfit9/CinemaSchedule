@@ -1,0 +1,122 @@
+﻿@model CinemaSchedule.Models.AddEventViewModel
+
+
+<script>
+    function handleSelectChange() {
+        var selectedValue = document.getElementById('type').value;
+        var minutesDuration = document.getElementById('minutesDuration');
+        var hoursDuration = document.getElementById('hoursDuration');
+        var eventName = document.getElementById('nameEvent');
+        var movies = document.getElementById('movies');
+
+        if (selectedValue === "Movie") {
+            hoursDuration.disabled = true;
+            hoursDuration.value = "0"
+            eventName.disabled = true;
+            eventName.value = ""
+            minutesDuration.disabled = true;
+            movies.disabled = false;
+            minutesDuration.value = "0"
+        } else {
+            hoursDuration.disabled = false;
+            minutesDuration.disabled = false;
+            eventName.disabled = false;
+            movies.disabled = true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('type').addEventListener('change', handleSelectChange);
+        handleSelectChange(); // Обработка начального значения
+    });
+</script>
+
+<h1>Добавление события</h1>
+<form method="post">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Название события</label>
+        <div class="col-sm-12">
+            @Html.ValidationMessageFor(m => m.EventName, null, new { @class = "text-danger" })
+            <input type="text" class="form-control" asp-for=EventName id="nameEvent">
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Зал</label>
+        <select class="form-select" aria-label="Default select example">
+            <option selected></option>
+            @if(Model.Halls is not null)
+            {
+                @foreach(var hall in Model.Halls)
+                {
+                    <option value=@hall.Id>@hall.HallName</option>
+                }
+            }
+            else
+            {
+                
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Тип события</label>
+        <select id = "type" class="form-select" aria-label="Default select example">
+            <option selected value="Movie">Фильм</option>
+            <option value="Break">Перерыв</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Фильм</label>
+        <select class="form-select" aria-label="Default select example" id="movies">
+            <option selected></option>
+            @if (Model.Movies is not null)
+            {
+                @foreach (var movie in Model.Movies)
+                {
+                    <option value=@movie.Id>@movie.MovieName</option>
+                }
+            }
+            else
+            {
+
+            }
+        </select>
+    </div>
+    <label for="exampleFormControlInput1" class="form-label">Время начала:</label>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Часы</label>
+        <select class="form-select" aria-label="Default select example" id="minutes">
+            @for (int i = 0; i <= 23; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+        <label for="exampleFormControlInput1" class="form-label">Минуты</label>
+        <select class="form-select" aria-label="Default select example" id="minutes">
+            @for (int i = 0; i <= 59; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <label for="exampleFormControlInput1" class="form-label">Продолжительность:</label>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Часы</label>
+        <select class="form-select" aria-label="Default select example" id="hoursDuration">
+            @for (int i = 0; i <= 8; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+        <label for="exampleFormControlInput1" class="form-label">Минуты</label>
+        <select class="form-select" aria-label="Default select example" id="minutesDuration">
+            @for (int i = 0; i <= 59; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </div>
+</form>
