@@ -2,7 +2,7 @@
 {
     public class ScheduleViewModel
     {
-        public List<HallsScheduleViewModel> HallsSchedules { get; set;}
-
+        public List<HallsScheduleViewModel>? HallsSchedules { get; set;}
+        public DateTime Date { get; set;} 
     }
 }

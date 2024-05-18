@@ -1,6 +1,6 @@
-﻿namespace CinemaSchedule.Models.Entities
+﻿namespace CinemaSchedule.Models
 {
-    public class Event
+    public class EditEventViewModel
     {
         public Guid Id { get; set; }
         public string? EventName { get; set; }
@@ -10,5 +10,7 @@
         public int? Duration { get; set; }
         public string Type { get; set; }
         public string? MovieId { get; set; }
+        public int Hours { get; set; }
+        public int Minutes { get; set; }
     }
 }

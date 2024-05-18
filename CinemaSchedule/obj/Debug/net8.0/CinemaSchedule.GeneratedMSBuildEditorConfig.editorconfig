@@ -130,6 +130,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Schedule/EditEvent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcRWRpdEV2ZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/d0306/source/repos/CinemaShedule/CinemaSchedule/CinemaSchedule/Views/Schedule/NewEvent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcTmV3RXZlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

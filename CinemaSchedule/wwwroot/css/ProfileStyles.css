@@ -22,18 +22,18 @@
 }
 .timeline-container {
     display: flex;
-    overflow-x: auto; /* Разрешить горизонтальную прокрутку */
-    white-space: nowrap; /* Запрет переноса строк */
-    height: 74vh;
+    overflow-x: auto;
+    white-space: nowrap; 
+    height: 65vh;
 }
 
 .venue-row {
-    display: inline-flex; /* Добавить поддержку горизонтального скролла */
+    display: inline-flex; 
 }
 
 .venue-column {
-    flex-shrink: 0; /* Запретить уменьшение размера блока */
-    margin-right: 20px; /* Отступ между залами */
+    flex-shrink: 0; 
+    margin-right: 20px; 
 }
 
 .venue {
@@ -44,8 +44,8 @@
 }
 
 .scrollbar {
-    overflow-y: auto; /* Разрешить вертикальную прокрутку внутри колонки */
-    max-height: 74vh; /* Ограничить высоту, чтобы избежать бесконечного роста */
+    overflow-y: auto; 
+    max-height: 76vh; 
 }
 
 .timeline-event {
@@ -54,21 +54,66 @@
     border-radius: 5px;
     padding:10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: normal; /* Разрешить перенос текста в событиях */
+    white-space: normal; 
 }
 
 .event-title {
     font-weight: bold;
-    text-align: center; /* Выравнивание текста по центру */
+    text-align: center; 
+    font-size:16px;
 }
 
 .event-details {
     display: flex;
     flex-direction: column;
-    margin-top: 5px;
+    margin-top: 3px;
     align-items: flex-end;
+    font-size: 14px;
 }
 
 .event-detail {
     margin-right: 5px;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 10px;
+    padding: 5px; 
+    width: 100%;
+}
+
+.button {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 16px;
+    text-align: center;
+    border: 2px solid;
+    transition: background-color 0.3s, color 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+
+}
+
+.green-border {
+    border-color: #6A9E71;
+    font-size: 14px;
+}
+
+    .green-border:hover {
+        background-color: #F3FEED; 
+        color: white; 
+    }
+
+.red-border {
+    border-color: red;
+    font-size: 14px;
+}
+
+    .red-border:hover {
+        background-color: #FAE4E4;
+        color: white;
+    }

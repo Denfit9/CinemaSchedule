@@ -8,20 +8,50 @@
         var hoursDuration = document.getElementById('hoursDuration');
         var eventName = document.getElementById('nameEvent');
         var movies = document.getElementById('movies');
+        var eventNameLabel = document.getElementById('eventNameLabel');
+        var hoursLabel = document.getElementById('hoursLabel');
+        var minutesLabel = document.getElementById('minutesLabel');
+        var movieLabel = document.getElementById('movieLabel');
+        var durationLabel = document.getElementById('durationLabel');
+        var movieError = document.getElementById('movieError');
+        var breakError = document.getElementById('breakError');
 
         if (selectedValue === "Movie") {
             hoursDuration.disabled = true;
+            hoursDuration.hidden = true;
             hoursDuration.value = "0"
             eventName.disabled = true;
+            eventName.hidden = true;
+            eventNameLabel.hidden = true;
+            hoursLabel.hidden = true;
+            minutesLabel.hidden = true;
+            movieLabel.hidden = false;
+            movies.hidden = false;
+            durationLabel.hidden = true;
             eventName.value = ""
             minutesDuration.disabled = true;
+            minutesDuration.hidden = true;
             movies.disabled = false;
             minutesDuration.value = "0"
+            movieError.hidden == false;
+            breakError.hidden == true;
         } else {
             hoursDuration.disabled = false;
             minutesDuration.disabled = false;
             eventName.disabled = false;
+            hoursDuration.hidden = false;
+            minutesDuration.hidden = false;
+            eventName.hidden = false;
+            eventNameLabel.hidden = false;
+            hoursLabel.hidden = false;
+            minutesLabel.hidden = false;
+            durationLabel.hidden = false;
+            movieLabel.hidden = true;
             movies.disabled = true;
+            movies.hidden = true;
+            movies.value = "";
+            movieError.hidden = true;
+            breakError.hidden == false;
         }
     }
 
@@ -34,15 +64,17 @@
 <h1>Добавление события</h1>
 <form method="post">
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Название события</label>
+        <label for="exampleFormControlInput1" id="eventNameLabel"class="form-label">Название события</label>
         <div class="col-sm-12">
-            @Html.ValidationMessageFor(m => m.EventName, null, new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.EventName, null, new { @class = "text-danger", id = "breakError" })
             <input type="text" class="form-control" asp-for=EventName id="nameEvent">
         </div>
     </div>
     <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Зал</label>
-        <select class="form-select" aria-label="Default select example">
+        @Html.ValidationMessageFor(m => m.HallId, null, new { @class = "text-danger", id = "movieError" })
+        @Html.ValidationMessageFor(m => m.HallId, null, new { @class = "text-danger", id = "breakError" })
+        <select class="form-select" aria-label="Default select example" asp-for="HallId">
             <option selected></option>
             @if(Model.Halls is not null)
             {
@@ -59,20 +91,32 @@
     </div>
     <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Тип события</label>
-        <select id = "type" class="form-select" aria-label="Default select example">
+        <select id = "type" class="form-select" aria-label="Default select example" asp-for="Type">
             <option selected value="Movie">Фильм</option>
             <option value="Break">Перерыв</option>
         </select>
     </div>
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Фильм</label>
-        <select class="form-select" aria-label="Default select example" id="movies">
+        <label for="exampleFormControlInput1" id="movieLabel" class="form-label">Фильм</label>
+        @Html.ValidationMessageFor(m => m.MovieId, null, new { @class = "text-danger", id="movieError" })
+        <select class="form-select" aria-label="Default select example" id="movies" asp-for="MovieId">
             <option selected></option>
             @if (Model.Movies is not null)
             {
                 @foreach (var movie in Model.Movies)
                 {
-                    <option value=@movie.Id>@movie.MovieName</option>
+                    
+                    var hours = movie.Duration / 3600;
+                    var minutes = (movie.Duration - (hours) * 3600)/60;
+                    if (hours > 0)
+                    {
+                        <option value=@movie.Id.ToString()>@movie.MovieName (@hours час. @minutes мин.)</option>
+                    }
+                    else
+                    {
+                        <option value=@movie.Id.ToString()>@movie.MovieName (@minutes мин.)</option>
+                    }
+
                 }
             }
             else
@@ -83,32 +127,32 @@
     </div>
     <label for="exampleFormControlInput1" class="form-label">Время начала:</label>
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Часы</label>
-        <select class="form-select" aria-label="Default select example" id="minutes">
+        <label for="exampleFormControlInput1" class="form-label">Часы</label> @Html.ValidationMessageFor(m => m.HoursBegin, null, new { @class = "text-danger", id = "movieError" })
+        <select class="form-select" aria-label="Default select example" id="minutes" asp-for="HoursBegin">
             @for (int i = 0; i <= 23; i++)
             {
                 <option value="@i">@i</option>
             }
         </select>
-        <label for="exampleFormControlInput1" class="form-label">Минуты</label>
-        <select class="form-select" aria-label="Default select example" id="minutes">
+        <label for="exampleFormControlInput1" class="form-label">Минуты</label> @Html.ValidationMessageFor(m => m.MinutesBegin, null, new { @class = "text-danger", id = "breakError" })
+        <select class="form-select" aria-label="Default select example" id="minutes" asp-for="MinutesBegin">
             @for (int i = 0; i <= 59; i++)
             {
                 <option value="@i">@i</option>
             }
         </select>
     </div>
-    <label for="exampleFormControlInput1" class="form-label">Продолжительность:</label>
+    <label for="exampleFormControlInput1" id="durationLabel" class="form-label">Продолжительность:</label>
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Часы</label>
-        <select class="form-select" aria-label="Default select example" id="hoursDuration">
+        <label for="exampleFormControlInput1" id="hoursLabel" class="form-label">Часы</label> @Html.ValidationMessageFor(m => m.Duration, null, new { @class = "text-danger", id = "breakError" })
+        <select class="form-select" aria-label="Default select example" id="hoursDuration" asp-for="HoursDuration">
             @for (int i = 0; i <= 8; i++)
             {
                 <option value="@i">@i</option>
             }
         </select>
-        <label for="exampleFormControlInput1" class="form-label">Минуты</label>
-        <select class="form-select" aria-label="Default select example" id="minutesDuration">
+        <label for="exampleFormControlInput1" id="minutesLabel" class="form-label">Минуты</label>
+        <select class="form-select" aria-label="Default select example" id="minutesDuration" asp-for="MinutesDuration">
             @for (int i = 0; i <= 59; i++)
             {
                 <option value="@i">@i</option>

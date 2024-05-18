@@ -1,0 +1,33 @@
+﻿@model CinemaSchedule.Models.EditEventViewModel
+
+
+@if (Model is null)
+{
+    <p>Не удалось найти событие</p>
+}
+else
+{
+    <h1>Изменение времени</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Часы</label> @Html.ValidationMessageFor(m => m.Hours, null, new { @class = "text-danger", id = "movieError" })
+            <select class="form-select" aria-label="Default select example" id="minutes" asp-for="Hours">
+                @for (int i = 0; i <= 23; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+            <label for="exampleFormControlInput1" class="form-label">Минуты</label> @Html.ValidationMessageFor(m => m.Minutes, null, new { @class = "text-danger", id = "breakError" })
+            <select class="form-select" aria-label="Default select example" id="minutes" asp-for="Minutes">
+                @for (int i = 0; i <= 59; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </div>
+    </form>
+}

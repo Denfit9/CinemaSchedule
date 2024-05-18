@@ -22,7 +22,7 @@
             <a style="color:black " asp-controller="Movies" asp-action="Movies" asp-route-id="@userAuth.cinemaID" class="nav-link link-body-emphasis px-2">Фильмы</a>
         </li>
         <li class="nav-item">
-            <a style="color:black " asp-controller="Schedule" asp-action="Schedule" class="nav-link link-body-emphasis px-2">Расписание</a>
+            <a style="color:black " asp-controller="Schedule" asp-action="Schedule" asp-route-date="@DateTime.Now.ToString("yyyy-MM-dd")" class="nav-link link-body-emphasis px-2">Расписание</a>
         </li>
     }
     else

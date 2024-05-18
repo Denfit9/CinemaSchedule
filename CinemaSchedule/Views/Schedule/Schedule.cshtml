@@ -10,9 +10,26 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
 </head>
+
+
 <main>
     <h1>Расписание</h1>
-    <a class="btn btn-light" href="/Schedule/NewEvent?date=2024-05-17">Новое событие</a>
+    <label for="releaseDate">Дата:</label>
+    <div class="ms-lg-0">
+        <form  id="dateForm">
+            <div class="ms-lg-0">
+                <input class="form-control" type="date" id="date" name="Date" asp-for="Date">
+            </div>
+        </form>
+        <script>
+            document.getElementById('date').addEventListener('input', function (event) {
+                var selectedDate = this.value;
+                window.location.href = '/Schedule/Schedule?date=' + selectedDate;
+               
+            });
+        </script>
+    </div>
+    <a class="btn btn-light" href="/Schedule/NewEvent?date=@Model.Date.ToString("yyyy-MM-dd")">Новое событие</a>
     @if(Model is not null)
     {
         <div class="timeline-container">
@@ -25,24 +42,63 @@
         {
                 <div class="venue-column">
                     <div class="venue">@hall.HallName</div>
-                        @if(hall.Events is not null)
+                        @if(hall.Events is not null && hall.Events.Count() !=0)
                         {
-                            <div class="timeline-event">
-                                <div class="event-title">Событие 2.2</div>
-                                <div class="event-details">
-                                    <div class="event-detail">Тип: фильм</div>
-                                    <div class="event-detail">Начало: 10:00</div>
-                                    <div class="event-detail">Конец: 12:40</div>
-                                    <div class="event-detail">Продолжительность 2 часа 40 минут</div>
-                                </div>
-                            </div>
-                            <div class="timeline-event">
-                                <div class="event-title">Событие 2.2</div>
-                                <div class="event-details">
-                                    <div class="event-detail">Деталь 1</div>
-                                    <div class="event-detail">Деталь 2</div>
-                                </div>
-                            </div>
+                            @foreach(var Event in hall.Events)
+                            {
+                                @if (Event.Type == "Фильм")
+                                {
+                                    var durationHours = Event.Duration / 3600;
+                                    var durationMinutes = (Event.Duration - durationHours * 3600) / 60;
+                                    <div class="timeline-event" style="background-color: #EBECEE;">
+                                        <div class="event-title">@Event.EventName</div>
+                                        <div class="event-details">
+                                            <div class="event-detail">Тип: фильм</div>
+                                            <div class="event-detail">Начало: @Event.Begins.ToString("HH:mm")</div>
+                                            <div class="event-detail">Конец: @Event.Ends.ToString("HH:mm")</div>
+                                            @if(durationHours == 0)
+                                            {
+                                                <div class="event-detail">Продолжительность: @durationMinutes мин. </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="event-detail">Продолжительность: @durationHours ч. @durationMinutes мин. </div>
+                                            }
+                                            <div class="button-container">
+                                                <a class="button green-border" asp-controller="Schedule" asp-action="EditEvent" asp-route-id="@Event.Id">Переместить</a>
+                                                <a class="button red-border" asp-action="Delete" asp-controller="Schedule" asp-route-id="@Event.Id">Удалить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if(Event.Type == "Перерыв")
+                                {
+                                    var durationHours = Event.Duration / 3600;
+                                    var durationMinutes = (Event.Duration - durationHours * 3600) / 60;
+                                    <div class="timeline-event" style="background-color: #A9E5EB">
+                                        <div class="event-title">@Event.EventName</div>
+                                        <div class="event-details">
+                                            @if (durationHours == 0)
+                                            {
+                                                <div class="event-detail">Тип: перерыв (@durationMinutes мин.)</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="event-detail">Тип: перерыв (@durationHours ч. @durationMinutes мин.)</div>
+                                            }
+                                            <div class="event-detail">Начало: @Event.Begins.ToString("HH:mm")</div>
+                                            <div class="event-detail">Конец: @Event.Ends.ToString("HH:mm")</div>
+
+                                            <div class="button-container">
+                                                <a class="button green-border" asp-controller="Schedule" asp-action="EditEvent" asp-route-id="@Event.Id">Переместить</a>
+                                                <a class="button red-border" asp-action="Delete" asp-controller="Schedule" asp-route-id="@Event.Id">Удалить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                }
+
                         }
                         else
                         {
