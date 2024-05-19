@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CinemaSchedule.Controllers
 {
@@ -53,7 +54,7 @@ namespace CinemaSchedule.Controllers
             var user = await userManager.GetUserAsync(User);
             var allMovies = dbContext.Movies.Where(x => x.CinemaId == user.cinemaID.ToString()).ToList();
             allMovies = allMovies.Where(x => x.StartsAt <= date).ToList();
-            allMovies = allMovies.Where(x => x.EndsAt <= date).ToList();
+            allMovies = allMovies.Where(x => x.EndsAt >= date).ToList();
             var halls = await dbContext.Halls.Where(x => x.CinemaId == user.cinemaID).ToListAsync();
             AddEventViewModel eventViewModel = new AddEventViewModel { Begins = date, Halls = halls, Movies = allMovies };
             return View(eventViewModel);
@@ -182,6 +183,211 @@ namespace CinemaSchedule.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> AutoEvents(DateTime? date)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var allMovies = dbContext.Movies.Where(x => x.CinemaId == user.cinemaID.ToString()).ToList();
+            allMovies = allMovies.Where(x => x.StartsAt <= date).ToList();
+            allMovies = allMovies.Where(x => x.EndsAt >= date).ToList();
+            var halls = await dbContext.Halls.Where(x => x.CinemaId == user.cinemaID).ToListAsync();
+
+            AddAutoSchedule addAutoSchedule = new AddAutoSchedule { Date = date.Value, Halls = halls, Movies = allMovies };
+
+            return View(addAutoSchedule);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AutoEvents(AddAutoSchedule addAutoSchedule, DateTime? date)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var allMovies = dbContext.Movies.Where(x => x.CinemaId == user.cinemaID.ToString()).ToList();
+            allMovies = allMovies.Where(x => x.StartsAt <= date).ToList();
+            allMovies = allMovies.Where(x => x.EndsAt >= date).ToList();
+            var halls = await dbContext.Halls.Where(x => x.CinemaId == user.cinemaID).ToListAsync();
+            bool error = false;
+            if (addAutoSchedule.moviesSelected == null)
+            {
+                ModelState.AddModelError(nameof(addAutoSchedule.moviesSelected), "Необходимо выбрать хотя бы один фильм");
+                error = true;
+            }
+            if (addAutoSchedule.HallId == null)
+            {
+                ModelState.AddModelError(nameof(addAutoSchedule.HallId), "Необходимо выбрать зал");
+                error = true;
+            }
+            if (addAutoSchedule.HoursDayEnds == null && addAutoSchedule.MinutesDayEnds == null)
+            {
+                ModelState.AddModelError(nameof(addAutoSchedule.HoursDayEnds), "Установите время конца рабочего дня");
+                error = true;
+            }
+            else if (addAutoSchedule.HoursDayEnds * 3600 + addAutoSchedule.MinutesDayEnds * 60 <= addAutoSchedule.HoursDayBegins * 3600 + addAutoSchedule.MinutesDayBegins * 60)
+            {
+                ModelState.AddModelError(nameof(addAutoSchedule.HoursDayEnds), "День должен заканчиваться позже, чем начинаться");
+                error = true;
+            }
+
+            addAutoSchedule.Movies = allMovies;
+            if (error)
+            {
+                return View(addAutoSchedule);
+            }
+            var existingEvents = dbContext.Events.Where(x => x.HallId == addAutoSchedule.HallId.ToString()).ToList();
+            existingEvents = existingEvents.Where(x => x.Begins.Date == addAutoSchedule.Date.Date).ToList();
+            var existingEventsFiltrated = GetOverlappingEvents(addAutoSchedule.Date.AddSeconds((double)(addAutoSchedule.HoursDayBegins * 3600 + addAutoSchedule.MinutesDayBegins * 60)), addAutoSchedule.Date.AddSeconds((double)(addAutoSchedule.HoursDayEnds * 3600 + addAutoSchedule.MinutesDayEnds * 60)), existingEvents);
+            if (existingEventsFiltrated is not null)
+            {
+                foreach (var Event in existingEventsFiltrated)
+                {
+                    var EventToDelete = await dbContext.Events
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == Event.Id);
+                    if (Event is not null)
+                    {
+                        dbContext.Events.Remove(Event);
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+            }
+            var moviesPicked = new List<Movie>();
+            foreach (var movie in addAutoSchedule.moviesSelected)
+            {
+                moviesPicked.Add(allMovies.FirstOrDefault(x => x.Id == new Guid(movie)));
+            }
+            var moviesHits = new List<Movie>();
+            if (addAutoSchedule.hits is not null)
+            {
+                foreach (var movie in addAutoSchedule.hits)
+                {
+                    moviesHits.Add(allMovies.FirstOrDefault(x => x.Id == new Guid(movie)));
+                }
+            }
+            var moviesKids = moviesPicked.Where(x => x.AgeRestriction <= 16).ToList();
+
+            List<Event> createdEvents = new List<Event>();
+
+            if (addAutoSchedule.ModeSelected == "random")
+            {
+                int turn = 0;
+                int currentTime = 0;
+                int adultMovieAllowed = 61200;
+                int timeLeft = addAutoSchedule.HoursDayEnds.Value * 3600 + addAutoSchedule.MinutesDayEnds.Value * 60;
+                bool running = true;
+                currentTime = addAutoSchedule.HoursDayBegins.Value * 3600 + addAutoSchedule.MinutesDayBegins.Value * 60;
+                timeLeft -= currentTime;
+                while (running)
+                {
+                    if (turn % 2 == 0)
+                    {
+                        if (!moviesPicked.Any(x => x.Duration < timeLeft))
+                        {
+                            running = false;
+                        }
+                        else
+                        {
+                            if(currentTime <= adultMovieAllowed)
+                            {
+                                var moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                if (moviesAccessable.Any())
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                            else
+                            {
+                                var moviesAccessable = moviesPicked.Where(x => x.Duration < timeLeft).ToList();
+                                if (moviesAccessable is not null)
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600 > 0)
+                        {
+                            if(timeLeft > addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)
+                            {
+                                createdEvents.Add(new Event
+                                {
+                                    EventName = "Перерыв",
+                                    HallId = addAutoSchedule.HallId,
+                                    Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                    Ends = addAutoSchedule.Date.AddSeconds((double)(currentTime + addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)),
+                                    Duration = (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600),
+                                    Type = "Перерыв",
+                                    
+                                });
+                                turn++;
+                                currentTime += addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                                timeLeft -= addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                            }
+                            else
+                            {
+                                running = false;
+                            }
+                        }
+                        else
+                        {
+                            turn++;
+                        }
+                    }
+                }
+                if(createdEvents.Count != 0)
+                {
+                    foreach(var Event in createdEvents)
+                    {
+                        await dbContext.Events.AddAsync(Event);
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+            }
+
+
+            return RedirectToAction("Schedule", "Schedule", new { date = date.Value.ToString("yyyy-MM-dd") });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> EditEvent(Guid id)
         {
             var Event = await dbContext.Events.FindAsync(id);
@@ -247,6 +453,27 @@ namespace CinemaSchedule.Controllers
                 }
             }
             return null;
+        }
+
+        public List<Event> GetOverlappingEvents(DateTime newEventStart, DateTime newEventEnd, List<Event> existingEvents)
+        {
+            var events = new List<Event>();
+            foreach (var existingEvent in existingEvents)
+            {
+                if (newEventStart < existingEvent.Ends && newEventEnd > existingEvent.Begins)
+                {
+                    events.Add(existingEvent);
+                }
+            }
+            if (!existingEvents.Any())
+            {
+                return null;
+            }
+            else
+            {
+                return events;
+            }
+
         }
 
         public async Task<IActionResult> Delete(Guid id)

@@ -1,0 +1,160 @@
+﻿@model CinemaSchedule.Models.AddAutoSchedule
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/AutoSchedule.css" asp-append-version="true" />
+</head>
+
+
+<h1>Авто-Расписание</h1>
+<hr />
+<body>
+    
+        <form method="post">
+        <div class="form-container">
+        <div class="left-column">
+            <h4>Фильмы</h4>
+                @Html.ValidationMessageFor(m => m.moviesSelected, null, new { @class = "text-danger", id = "breakError" })
+                @foreach (var movie in Model.Movies)
+                {
+                    <div class="filter-item">
+                        @if(Model.moviesSelected is not null)
+                        {
+                            if (Model.moviesSelected.Contains(movie.Id.ToString()))
+                            {
+                                <input type="checkbox" name="moviesSelected" id="MovieSelector" value="@movie.Id" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="moviesSelected" id="MovieSelector" value="@movie.Id">
+                            }
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="moviesSelected" id="MovieSelector" value="@movie.Id">
+                        }   
+                        @{
+                            var movieDuration = movie.Duration / 60;
+                        }
+                        <label for="filter1" style="margin-right:5px;">@movie.MovieName (@movieDuration мин.)</label> |  <input type="checkbox" title="Фильм будет ставиться и вечером, вне зависимости от его возрастных ограничений" style ="margin-left: 5px; margin-right:5px;" name="hits" id="HitSelector" value="@movie.Id" > Хит
+                    </div>
+                }
+            
+
+        </div>
+        <div class="right-column">
+            <h4>Настройки</h4>
+            
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Зал</label> @Html.ValidationMessageFor(m => m.HallId, null, new { @class = "text-danger", id = "breakError" })
+                    <select class="form-select" aria-label="Default select example" asp-for="HallId">
+                        <option selected></option>
+                        @if (Model.Halls is not null)
+                        {
+                            @foreach (var hall in Model.Halls)
+                            {
+                                <option value=@hall.Id>@hall.HallName</option>
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    </select>
+                </div>
+                <hr />
+                <label for="exampleFormControlInput1" class="form-label">Время открытия:</label>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="hours">Часы</label>
+                        <select class="form-select" aria-label="Default select example" id="hours" style="width: 100%;" asp-for="HoursDayBegins">
+                            @for (int i = 0; i <= 23; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="minutes">Минуты</label>
+                        <select class="form-select" aria-label="Default select example" id="minutes" style="width: 100%;" asp-for="MinutesDayBegins">
+                            @for (int i = 0; i <= 59; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <label for="exampleFormControlInput1" class="form-label">Время закрытия:</label> @Html.ValidationMessageFor(m => m.HoursDayEnds, null, new { @class = "text-danger", id = "breakError" })
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="hours">Часы</label> 
+                        <select class="form-select" aria-label="Default select example" id="hours" style="width: 100%;" asp-for="HoursDayEnds">
+                            @for (int i = 0; i <= 23; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="minutes">Минуты</label>
+                        <select class="form-select" aria-label="Default select example" id="minutes" style="width: 100%;" asp-for="MinutesDayEnds">
+                            @for (int i = 0; i <= 59; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <label for="exampleFormControlInput1" class="form-label">Длительность перерыва между фильмами:</label>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="hours">Часы</label>
+                        <select class="form-select" aria-label="Default select example" id="hours" style="width: 100%;" asp-for="HoursBreak">
+                            @for (int i = 0; i <= 23; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="minutes">Минуты</label>
+                        <select class="form-select" aria-label="Default select example" id="minutes" style="width: 100%;" asp-for="MinutesBreak">
+                            @for (int i = 0; i <= 59; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <label for="exampleFormControlInput1" class="form-label">Режим:</label>
+                <div class="input-row-mode">
+                    <div class="form-check form-check-inline">
+                        <input title="случайный порядок" class="form-check-input" type="radio" name="ModeSelected" value="random" checked>
+                        <label class="form-check-label" for="inlineRadio1" id="random">Случайный порядок</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input title="фильмы с малым возрастным рейтингом ставятся утром" class="form-check-input" type="radio" name="ModeSelected" value="working">
+                        <label class="form-check-label" for="inlineRadio2" id="working">Будний день</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input title="Фильмы ставятся вне зависимости от их возратсного ограничения" class="form-check-input" type="radio" name="ModeSelected" value="weekend">
+                        <label class="form-check-label" for="inlineRadio3" id="weekend">Выходной день</label>
+                    </div>
+                </div>
+                <hr />
+         
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                </div>
+
+        </div>
+       
+    </div>
+    </form>
+</body>
+
+    
+</main>

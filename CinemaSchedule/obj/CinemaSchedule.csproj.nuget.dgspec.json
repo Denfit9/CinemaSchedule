@@ -49,6 +49,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Font.Awesome": {
+              "target": "Package",
+              "version": "[5.15.4, )"
+            },
             "FullCalendar": {
               "target": "Package",
               "version": "[3.9.0, )"

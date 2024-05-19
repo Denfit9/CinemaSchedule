@@ -22,9 +22,8 @@
 }
 .timeline-container {
     display: flex;
-    overflow-x: auto;
     white-space: nowrap; 
-    height: 65vh;
+    overflow-x: auto;
 }
 
 .venue-row {
@@ -66,7 +65,7 @@
 .event-details {
     display: flex;
     flex-direction: column;
-    margin-top: 3px;
+
     align-items: flex-end;
     font-size: 14px;
 }
@@ -79,8 +78,8 @@
     display: flex;
     justify-content: space-between; 
     align-items: center; 
-    margin-top: 10px;
-    padding: 5px; 
+    margin-top: 5px;
+ 
     width: 100%;
 }
 
@@ -88,9 +87,9 @@
     text-decoration: none;
     color: black;
     background-color: white;
-    padding: 5px 15px;
+    padding: 3px 10px;
     border-radius: 25px;
-    font-size: 16px;
+    font-size: 12px;
     text-align: center;
     border: 2px solid;
     transition: background-color 0.3s, color 0.3s;
@@ -103,17 +102,43 @@
     font-size: 14px;
 }
 
-    .green-border:hover {
-        background-color: #F3FEED; 
-        color: white; 
-    }
+.green-border:hover {
+    background-color: #F3FEED; 
+    color: white; 
+}
 
 .red-border {
     border-color: red;
     font-size: 14px;
 }
 
-    .red-border:hover {
-        background-color: #FAE4E4;
-        color: white;
-    }
+.red-border:hover {
+    background-color: #FAE4E4;
+    color: white;
+}
+.row-event {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-event label {
+    margin-right: 10px; 
+}
+.row-event input{
+
+}
+.row-event input,
+.row-event button {
+    padding: 8px 12px;
+}
+
+
+.ms-lg-0{
+    margin: 2%;
+}
+
+.horizontal-schedule {
+    margin-top: -1.5%;
+    margin-bottom: 0.5%;
+}

@@ -1,0 +1,95 @@
+﻿body {
+}
+
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.left-column {
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    padding-top: 0px;
+    box-sizing: border-box;
+    height: 66vh;
+    overflow-y: auto; 
+}
+
+.right-column {
+    width: 70%;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    padding-top: 0px;
+}
+
+.filter-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    align-content:center;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.filter-item label {
+    margin-left: 5px;
+}
+.pb-3{
+    width:100%;
+}
+
+
+
+.title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 150px;
+}
+
+.input-row-mode {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 550px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .input-group label {
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        padding: 5px;
+        width: 60px;
+        text-align: center;
+    }
+
+.form-container {
+    display: flex;
+}
+
+.form-column {
+    flex: 1;
+    margin-right: 20px; /* Отступ между колонками */
+}
+
+    .form-column:last-child {
+        margin-right: 0; /* Убираем отступ у последней колонки */
+    }

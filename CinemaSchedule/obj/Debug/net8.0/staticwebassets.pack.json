@@ -181,6 +181,10 @@
       "PackagePath": "staticwebassets\\CinemaSchedule.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\css\\AutoSchedule.css",
+      "PackagePath": "staticwebassets\\css\\AutoSchedule.css"
+    },
+    {
       "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -191,6 +195,18 @@
     {
       "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\cinemaPFP.png",
       "PackagePath": "staticwebassets\\images\\cinemaPFP.png"
+    },
+    {
+      "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\edit-solid.svg",
+      "PackagePath": "staticwebassets\\images\\edit-solid.svg"
+    },
+    {
+      "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\move.png",
+      "PackagePath": "staticwebassets\\images\\move.png"
+    },
+    {
+      "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\trash-solid.svg",
+      "PackagePath": "staticwebassets\\images\\trash-solid.svg"
     },
     {
       "Id": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\wwwroot\\images\\userPFP.png",

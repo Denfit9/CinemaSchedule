@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gXo8a9KahsKuEDZ10Z8YX9Tt+EW0c7d3GKiX7rsmDebsOh1m0MGZZEf3bsOEv8QAwf2DYQpefbteaNoH6WCbHA==",
+  "dgSpecHash": "++WOZQsrDDQyqCqWX+ripyp5UKC5Yl4m2OrXyKqHPzWt3oHxTTHD8/Ae8pbd8YwSlpq4UmZYLf8fTXeyMFUjUQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\d0306\\source\\repos\\CinemaShedule\\CinemaSchedule\\CinemaSchedule\\CinemaSchedule.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\d0306\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\d0306\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\d0306\\.nuget\\packages\\bootstrap\\5.3.3\\bootstrap.5.3.3.nupkg.sha512",
+    "C:\\Users\\d0306\\.nuget\\packages\\font.awesome\\5.15.4\\font.awesome.5.15.4.nupkg.sha512",
     "C:\\Users\\d0306\\.nuget\\packages\\fullcalendar\\3.9.0\\fullcalendar.3.9.0.nupkg.sha512",
     "C:\\Users\\d0306\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\d0306\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
