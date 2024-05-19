@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace CinemaSchedule.Controllers
 {
@@ -284,7 +283,7 @@ namespace CinemaSchedule.Controllers
                         }
                         else
                         {
-                            if(currentTime <= adultMovieAllowed)
+                            if (currentTime <= adultMovieAllowed)
                             {
                                 var moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
                                 if (moviesAccessable.Any())
@@ -344,9 +343,9 @@ namespace CinemaSchedule.Controllers
                     }
                     else
                     {
-                        if(addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600 > 0)
+                        if (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600 > 0)
                         {
-                            if(timeLeft > addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)
+                            if (timeLeft > addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)
                             {
                                 createdEvents.Add(new Event
                                 {
@@ -356,7 +355,7 @@ namespace CinemaSchedule.Controllers
                                     Ends = addAutoSchedule.Date.AddSeconds((double)(currentTime + addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)),
                                     Duration = (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600),
                                     Type = "Перерыв",
-                                    
+
                                 });
                                 turn++;
                                 currentTime += addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
@@ -373,16 +372,384 @@ namespace CinemaSchedule.Controllers
                         }
                     }
                 }
-                if(createdEvents.Count != 0)
+                if (createdEvents.Count != 0)
                 {
-                    foreach(var Event in createdEvents)
+                    foreach (var Event in createdEvents)
                     {
                         await dbContext.Events.AddAsync(Event);
                         await dbContext.SaveChangesAsync();
                     }
                 }
             }
+            else if (addAutoSchedule.ModeSelected == "working")
+            {
+                int turn = 0;
+                int currentTime = 0;
+                int peakHoursBegin = 54000;
+                int adultMovieAllowed = 61200;
+                int timeLeft = addAutoSchedule.HoursDayEnds.Value * 3600 + addAutoSchedule.MinutesDayEnds.Value * 60;
+                bool running = true;
+                currentTime = addAutoSchedule.HoursDayBegins.Value * 3600 + addAutoSchedule.MinutesDayBegins.Value * 60;
+                timeLeft -= currentTime;
+                while (running)
+                {
+                    if (turn % 2 == 0)
+                    {
+                        if (!moviesPicked.Any(x => x.Duration < timeLeft))
+                        {
+                            running = false;
+                        }
+                        else
+                        {
+                            if (currentTime <= peakHoursBegin)
+                            {
+                                List<Movie> moviesAccessable = new List<Movie>();
+                                if (moviesKids is null) { }
+                                else
+                                {
+                                    moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                }
 
+                                if (moviesHits is not null)
+                                {
+                                    moviesAccessable = moviesAccessable.Except(moviesHits).ToList();
+                                    if(moviesAccessable.Count == 0)
+                                    {
+                                        var allowedHits = moviesHits.Where(x => x.AgeRestriction <= 16 && x.Duration < timeLeft).ToList();
+                                        moviesAccessable.AddRange(allowedHits);
+                                        moviesAccessable.AddRange(allowedHits);
+                                    }
+                                }
+
+                                if (moviesAccessable.Count != 0)
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                            else if (currentTime >= peakHoursBegin && currentTime <= adultMovieAllowed)
+                            {
+                                List<Movie> moviesAccessable = new List<Movie>();
+                                if (moviesKids is null) { }
+                                else
+                                {
+                                    moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                }
+                                if (moviesHits is not null)
+                                {
+                                    var allowedHits = moviesHits.Where(x => x.AgeRestriction <= 16 && x.Duration < timeLeft).ToList();
+                                    moviesAccessable.AddRange(allowedHits);
+                                    moviesAccessable.AddRange(allowedHits);
+                                }
+                                if (moviesAccessable.Any())
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                            else if (currentTime <= adultMovieAllowed)
+                            {
+                                List<Movie> moviesAccessable = new List<Movie>();
+                                if (moviesKids is null) { }
+                                else
+                                {
+                                    moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                }
+
+                                if (moviesHits is not null)
+                                {
+                                    var allowedHits = moviesHits.Where(x => x.AgeRestriction <= 16 && x.Duration < timeLeft).ToList();
+                                    moviesAccessable.AddRange(allowedHits);
+                                    moviesAccessable.AddRange(allowedHits);
+                                }
+                                if (moviesAccessable.Any())
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                            else
+                            {
+                                var moviesAccessable = moviesPicked.Where(x => x.Duration < timeLeft && x.AgeRestriction >= 16).ToList();
+                                if (moviesHits is not null)
+                                {
+                                    var allowedHits = moviesHits.Where(x => x.Duration < timeLeft).ToList();
+                                    moviesAccessable.AddRange(allowedHits);
+                                }
+                                if(moviesAccessable.Count == 0)
+                                {
+                                    if (moviesKids is null) { }
+                                    else
+                                    {
+                                        moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                    }
+                                }
+                                if (moviesAccessable is not null)
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600 > 0)
+                        {
+                            if (timeLeft > addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)
+                            {
+                                createdEvents.Add(new Event
+                                {
+                                    EventName = "Перерыв",
+                                    HallId = addAutoSchedule.HallId,
+                                    Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                    Ends = addAutoSchedule.Date.AddSeconds((double)(currentTime + addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)),
+                                    Duration = (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600),
+                                    Type = "Перерыв",
+
+                                });
+                                turn++;
+                                currentTime += addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                                timeLeft -= addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                            }
+                            else
+                            {
+                                running = false;
+                            }
+                        }
+                        else
+                        {
+                            turn++;
+                        }
+                    }
+                }
+                if (createdEvents.Count != 0)
+                {
+                    foreach (var Event in createdEvents)
+                    {
+                        await dbContext.Events.AddAsync(Event);
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+            }
+            else if (addAutoSchedule.ModeSelected == "weekend")
+            {
+                int turn = 0;
+                int currentTime = 0;
+                int adultMovieAllowed = 61200;
+                int timeLeft = addAutoSchedule.HoursDayEnds.Value * 3600 + addAutoSchedule.MinutesDayEnds.Value * 60;
+                bool running = true;
+                currentTime = addAutoSchedule.HoursDayBegins.Value * 3600 + addAutoSchedule.MinutesDayBegins.Value * 60;
+                timeLeft -= currentTime;
+                while (running)
+                {
+                    if (turn % 2 == 0)
+                    {
+                        if (!moviesPicked.Any(x => x.Duration < timeLeft))
+                        {
+                            running = false;
+                        }
+                        else
+                        {
+                            if (currentTime <= adultMovieAllowed)
+                            {
+                                List<Movie> moviesAccessable = new List<Movie>();
+                                if (moviesKids is null) { }
+                                else
+                                {
+                                    moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                }
+
+                                if (moviesHits is not null)
+                                {
+                                    var allowedHits = moviesHits.Where(x => x.AgeRestriction <= 16 && x.Duration < timeLeft).ToList();
+                                    moviesAccessable.AddRange(allowedHits);
+                                    moviesAccessable.AddRange(allowedHits);
+                                }
+                                if (moviesAccessable.Any())
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                            else
+                            {
+                                var moviesAccessable = moviesPicked.Where(x => x.Duration < timeLeft && x.AgeRestriction >= 16).ToList();
+                                if (moviesHits is not null)
+                                {
+                                    var allowedHits = moviesHits.Where(x => x.Duration < timeLeft).ToList();
+                                    moviesAccessable.AddRange(allowedHits);
+                                }
+                                if (moviesAccessable.Count == 0)
+                                {
+                                    if (moviesKids is null) { }
+                                    else
+                                    {
+                                        moviesAccessable = moviesKids.Where(x => x.Duration < timeLeft).ToList();
+                                    }
+                                }
+                                if (moviesAccessable is not null)
+                                {
+                                    Random rnd = new Random();
+                                    int r = rnd.Next(moviesAccessable.Count);
+                                    Movie movieToAdd = moviesAccessable[r];
+                                    createdEvents.Add(new Event
+                                    {
+                                        EventName = movieToAdd.MovieName,
+                                        HallId = addAutoSchedule.HallId,
+                                        Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                        Ends = addAutoSchedule.Date.AddSeconds(currentTime + movieToAdd.Duration),
+                                        Duration = movieToAdd.Duration,
+                                        Type = "Фильм",
+                                        MovieId = movieToAdd.Id.ToString()
+                                    });
+                                    currentTime += movieToAdd.Duration;
+                                    timeLeft -= movieToAdd.Duration;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    currentTime++;
+                                    timeLeft--;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600 > 0)
+                        {
+                            if (timeLeft > addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)
+                            {
+                                createdEvents.Add(new Event
+                                {
+                                    EventName = "Перерыв",
+                                    HallId = addAutoSchedule.HallId,
+                                    Begins = addAutoSchedule.Date.AddSeconds(currentTime),
+                                    Ends = addAutoSchedule.Date.AddSeconds((double)(currentTime + addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600)),
+                                    Duration = (addAutoSchedule.MinutesBreak * 60 + addAutoSchedule.HoursBreak * 3600),
+                                    Type = "Перерыв",
+
+                                });
+                                turn++;
+                                currentTime += addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                                timeLeft -= addAutoSchedule.MinutesBreak.Value * 60 + addAutoSchedule.HoursBreak.Value * 3600;
+                            }
+                            else
+                            {
+                                running = false;
+                            }
+                        }
+                        else
+                        {
+                            turn++;
+                        }
+                    }
+                }
+                if (createdEvents.Count != 0)
+                {
+                    foreach (var Event in createdEvents)
+                    {
+                        await dbContext.Events.AddAsync(Event);
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+            }
 
             return RedirectToAction("Schedule", "Schedule", new { date = date.Value.ToString("yyyy-MM-dd") });
         }

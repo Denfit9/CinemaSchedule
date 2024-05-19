@@ -35,7 +35,7 @@
                         @{
                             var movieDuration = movie.Duration / 60;
                         }
-                        <label for="filter1" style="margin-right:5px;">@movie.MovieName (@movieDuration мин.)</label> |  <input type="checkbox" title="Фильм будет ставиться и вечером, вне зависимости от его возрастных ограничений" style ="margin-left: 5px; margin-right:5px;" name="hits" id="HitSelector" value="@movie.Id" > Хит
+                        <label for="filter1" style="margin-right:5px;">@movie.MovieName (@movieDuration мин., @movie.AgeRestriction+)</label> |  <input type="checkbox" title="Фильм имеет возможность появиться только в самые нагруженные времена суток" style ="margin-left: 5px; margin-right:5px;" name="hits" id="HitSelector" value="@movie.Id" > Хит
                     </div>
                 }
             
@@ -131,15 +131,15 @@
                 <label for="exampleFormControlInput1" class="form-label">Режим:</label>
                 <div class="input-row-mode">
                     <div class="form-check form-check-inline">
-                        <input title="случайный порядок" class="form-check-input" type="radio" name="ModeSelected" value="random" checked>
+                        <input title="Cлучайный порядок фильмов." class="form-check-input" type="radio" name="ModeSelected" value="random" checked>
                         <label class="form-check-label" for="inlineRadio1" id="random">Случайный порядок</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input title="фильмы с малым возрастным рейтингом ставятся утром" class="form-check-input" type="radio" name="ModeSelected" value="working">
+                        <input title="Фильмы-хиты могут появиться только вечером." class="form-check-input" type="radio" name="ModeSelected" value="working">
                         <label class="form-check-label" for="inlineRadio2" id="working">Будний день</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input title="Фильмы ставятся вне зависимости от их возратсного ограничения" class="form-check-input" type="radio" name="ModeSelected" value="weekend">
+                        <input title="Фильмы-хиты могут появиться в любое время суток." class="form-check-input" type="radio" name="ModeSelected" value="weekend">
                         <label class="form-check-label" for="inlineRadio3" id="weekend">Выходной день</label>
                     </div>
                 </div>
