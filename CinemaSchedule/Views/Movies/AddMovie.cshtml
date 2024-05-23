@@ -5,7 +5,7 @@
 
 <form method="post">
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Название заметки</label>
+        <label for="exampleFormControlInput1" class="form-label">Название фильма</label>
         <div class="col-sm-12">
             @Html.ValidationMessageFor(m => m.MovieName, null, new { @class = "text-danger" })
             <input type="text" class="form-control" asp-for="MovieName">
