@@ -163,6 +163,15 @@ namespace CinemaSchedule.Controllers
             }
             return RedirectToAction("CinemaProfile", "Cinema");
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditCinemaEmployee(Guid Id)
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> CinemaProfileVisit(Guid id)
         {

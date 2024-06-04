@@ -26,6 +26,8 @@ public class DBContext : IdentityDbContext<User>
     public DbSet<GenreConnector> GenreConnectors { get; set; }
     public DbSet<CountryConnector> CountryConnectors { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
     public DbSet<Event> Events { get; set; }    
     protected override void OnModelCreating(ModelBuilder builder)
     {

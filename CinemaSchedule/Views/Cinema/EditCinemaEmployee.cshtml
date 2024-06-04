@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity.Data;
+@using CinemaSchedule.Views.Profile;
+@using CinemaSchedule.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    var userAuth = await UserManager.GetUserAsync(User);
+}
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/ProfileStyles.css" asp-append-version="true" />
+</head>
+<main class="container">
+    <h1>Изменение прав сотрудника</h1>
+   
+</main>

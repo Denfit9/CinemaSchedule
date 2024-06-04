@@ -198,9 +198,44 @@
                                         <td>
                                              @if (Model.DirectorId.ToString() == userAuth.Id)
                                              {
-                                                 <a class="btn btn-info">Изменить</a>
-                                             }
-                                        </td>
+                                                            if(emp.Id == userAuth.Id)
+                                                            {
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        Изменить
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a class="dropdown-item" href="#">Выйти</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        Изменить
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a class="dropdown-item" asp-controller="Cinema" asp-action="EditCinemaEmployee" asp-route-Id="@emp.Id">Изменить права</a></li>
+                                                                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                                                                        <li><a class="dropdown-item" href="#">Сделать директором</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            }
+
+                                                        }
+                                                        else if(emp.Id == userAuth.Id)
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Изменить
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item" href="#">Выйти</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                    </td>
                                         </tr>
                                     }
                                 }

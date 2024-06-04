@@ -840,7 +840,6 @@ namespace CinemaSchedule.Controllers
             {
                 return events;
             }
-
         }
 
         public async Task<IActionResult> Delete(Guid id)
