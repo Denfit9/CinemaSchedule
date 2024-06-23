@@ -168,7 +168,8 @@ namespace CinemaSchedule.Controllers
         [Authorize]
         public async Task<IActionResult> EditCinemaEmployee(Guid Id)
         {
-            return View();
+            User userEmployee = await userManager.FindByIdAsync(Id.ToString());
+            return View(userEmployee);
         }
 
 
